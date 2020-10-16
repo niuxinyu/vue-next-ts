@@ -1,6 +1,12 @@
 const path = require('path');
 
 module.exports = {
+    // pluginOptions: {
+    //   'style-resources-loader': {
+    //     preProcessor: 'less',
+    //     patterns: [path.resolve(__dirname, './src/theme/index.less')]
+    //   }
+    // }
     css: {
         loaderOptions: {
             less: {
@@ -8,11 +14,12 @@ module.exports = {
                 javascriptEnabled: true
             }
         }
+    },
+
+    pluginOptions: {
+      'style-resources-loader': {
+        preProcessor: 'less',
+        patterns: [path.resolve(__dirname, './src/theme/index.less')]
+      }
     }
-    // pluginOptions: {
-    //   'style-resources-loader': {
-    //     preProcessor: 'less',
-    //     patterns: [path.resolve(__dirname, './src/theme/index.less')]
-    //   }
-    // }
 };
