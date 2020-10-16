@@ -38,6 +38,11 @@ export default defineComponent({
     UserOutlined,
     SettingOutlined,
     PoweroffOutlined
+  },
+  data () {
+    return {
+      visible: false
+    };
   }
 });
 </script>

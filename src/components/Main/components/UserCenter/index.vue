@@ -2,9 +2,7 @@
   <div class="user-center">
     <Notice class="notice"></Notice>
     <User class="user"></User>
-    <div class="language">
-      <Language></Language>
-    </div>
+    <Language class="language"></Language>
   </div>
 </template>
 

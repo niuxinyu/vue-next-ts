@@ -14,6 +14,7 @@ module.exports = {
         'space-before-function-paren': 2,
         // 允许在ts内使用var和require
         '@typescript-eslint/no-var-requires': 0,
+        '@typescript-eslint/ban-ts-ignore': 0
     },
     env: {
         node: true

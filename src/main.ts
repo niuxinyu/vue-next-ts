@@ -9,8 +9,7 @@ import 'ant-design-vue/dist/antd.css';
 import './theme/index.less';
 
 // vue i18n
-// import { initI18n } from '@/libs/tools';
-// const i18n = initI18n('CN', 'US');
+import i18n from "@/language";
 
-// createApp(App).use(store).use(router).use(i18n).mount('#app');
-createApp(App).use(store).use(router).mount('#app');
+createApp(App as any).use(store).use(router).use(i18n).mount('#app');
+// createApp(App).use(store).use(router).mount('#app');

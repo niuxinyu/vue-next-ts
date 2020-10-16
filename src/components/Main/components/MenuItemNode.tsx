@@ -2,6 +2,7 @@ import { Menu } from 'ant-design-vue';
 import Icon from '@ant-design/icons-vue';
 import './MenuItem.less';
 import { defineComponent } from 'vue';
+import { getMenuName } from '@/libs/tools';
 
 const MenuItemNode = defineComponent({
     components: {
@@ -23,8 +24,7 @@ const MenuItemNode = defineComponent({
                                     {
                                         menu.meta.icon && <menu.meta.icon/>
                                     }
-
-                                    {menu.meta.title}
+                                    {getMenuName(menu, this)}
                                 </span>
                             );
                         }
@@ -42,7 +42,7 @@ const MenuItemNode = defineComponent({
                     return (
                         <Menu.Item key={menu.name}>
                             <span style={'overflow:hidden;white-space:normal;text-overflow:clip;'}>
-                                {menu.meta.title}
+                                {getMenuName(menu, this)}
                             </span>
                         </Menu.Item>
                     );
