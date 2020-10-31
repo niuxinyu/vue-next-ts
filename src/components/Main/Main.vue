@@ -12,7 +12,12 @@
       <Header class="header">
         <div class="header-wrapper">
           <span class="collapsed" @click="handleCollapsed">
-            <MenuUnfoldOutlined/>
+            <template v-if="collapsed">
+              <MenuUnfoldOutlined/>
+            </template>
+            <template v-else>
+              <MenuFoldOutlined/>
+            </template>
           </span>
           <UserCenter></UserCenter>
         </div>
@@ -27,7 +32,7 @@
 <script lang="ts">
 import { Layout } from 'ant-design-vue';
 import MenuNode from '@/components/Main/components/MenuNode.vue';
-import { MenuUnfoldOutlined } from '@ant-design/icons-vue';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import Logo from './components/Logo';
 import MaxLogo from '@/assets/images/max-logo-slow.gif';
 import MinLogo from '@/assets/images/min-logo-slow.gif';
@@ -42,6 +47,7 @@ export default defineComponent({
     Header: Layout.Header,
     Content: Layout.Content,
     MenuNode,
+    MenuFoldOutlined,
     MenuUnfoldOutlined,
     Logo,
     UserCenter

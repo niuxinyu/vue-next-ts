@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import { initI18n } from '@/libs/tools';
 import customZhCn from './lang/zh-CN';
+import customZhTw from './lang/zh-TW';
 import customEnUs from './lang/en-US';
 
 
@@ -11,6 +12,7 @@ const localLang = (navLang === 'zh-CN' || navLang === 'en-US') ? navLang : false
 
 const messages = {
     'zh-CN': customZhCn,
+    'zh-TW': customZhTw,
     'en-US': customEnUs
 };
 

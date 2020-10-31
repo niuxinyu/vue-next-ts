@@ -1,5 +1,6 @@
 <template>
   <div class="user-center">
+    <FullScreen/>
     <Notice class="notice"></Notice>
     <User class="user"></User>
     <Language class="language"></Language>
@@ -11,13 +12,15 @@ import { defineComponent } from 'vue';
 import User from './components/User/index.vue';
 import Language from './components/Language/index.vue';
 import Notice from './components/Notice/index.vue';
+import FullScreen from './components/FullScreen/index.vue';
 
 export default defineComponent({
   name: 'UserCenter',
   components: {
     Notice,
     User,
-    Language
+    Language,
+    FullScreen
   }
 });
 </script>
@@ -26,6 +29,7 @@ export default defineComponent({
 .user-center {
   float: right;
   display: flex;
+  margin-right: 15px;
 }
 
 .userCenterPadding {

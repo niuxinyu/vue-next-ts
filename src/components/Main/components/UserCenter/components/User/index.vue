@@ -18,7 +18,7 @@
       </Menu>
     </template>
     <span>
-      用户中心
+      {{ t('user') }}
     </span>
   </Dropdown>
 </template>
@@ -27,6 +27,7 @@
 import { defineComponent } from 'vue';
 import { Dropdown, Menu } from 'ant-design-vue';
 import { UserOutlined, SettingOutlined, PoweroffOutlined } from '@ant-design/icons-vue';
+import { usei18n } from '@/libs/tools';
 
 export default defineComponent({
   name: 'User',
@@ -38,6 +39,24 @@ export default defineComponent({
     UserOutlined,
     SettingOutlined,
     PoweroffOutlined
+  },
+  setup () {
+    const msg = {
+      messages: {
+        'zh-CN': {
+          user: '用户中心'
+        },
+        'zh-TW': {
+          user: '用戶中心'
+        },
+        'en-US': {
+          user: 'UserCenter'
+        }
+      }
+    };
+    return {
+      ...usei18n(msg)
+    };
   },
   data () {
     return {
