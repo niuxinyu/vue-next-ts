@@ -1,7 +1,6 @@
 import config from '@/config';
 import { routeHasExist } from '@/libs/utils';
 import { TagNavItem } from '@/types';
-import router from "@/router";
 
 const homeName = config.homeName;
 
@@ -22,14 +21,14 @@ export default {
         addTag (state: State, payload: AddTag): void {
             const { route, type = 'unshift' } = payload;
             if (!routeHasExist(state.list, route)) {
-                state.list.push(route);
-            }
-            else {
-                if (route.name === homeName) {
-                    state.list.unshift(route);
-                }
+                if (type === 'push') state.list.push(route);
                 else {
-                    state.list.splice(1, 0, route);
+                    if (route.name === homeName) {
+                        state.list.unshift(route);
+                    }
+                    else {
+                        state.list.splice(1, 0, route);
+                    }
                 }
             }
         },

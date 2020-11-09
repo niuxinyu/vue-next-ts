@@ -91,8 +91,7 @@ export default defineComponent({
     // this.setTagNavList();
     const { name, meta, params, query } = this.$route;
     this.addTag({
-      route: { name, meta, params, query },
-      type: 'push'
+      route: { name, meta, params, query }
     });
   },
   computed: {
@@ -104,7 +103,8 @@ export default defineComponent({
     '$route' (newVal: TagNavItem): void {
       const { name, meta, params, query } = newVal;
       this.addTag({
-        route: { name, meta, params, query }
+        route: { name, meta, params, query },
+        type: 'push'
       });
     }
   }
