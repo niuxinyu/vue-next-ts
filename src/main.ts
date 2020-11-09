@@ -11,5 +11,9 @@ import './theme/index.less';
 // vue i18n
 import i18n from "@/language";
 
-createApp(App as any).use(store).use(router).use(i18n).mount('#app');
+createApp(App as any)
+    .use(store)
+    .use(router)
+    .use(i18n)
+    .mount('#app');
 // createApp(App).use(store).use(router).mount('#app');

@@ -38,7 +38,8 @@ const MenuItemNode = defineComponent({
                             }
                         </Menu.SubMenu>
                     );
-                } else {
+                }
+                else {
                     return (
                         <Menu.Item key={menu.name}>
                             <span style={'overflow:hidden;white-space:normal;text-overflow:clip;'}>
@@ -49,12 +50,15 @@ const MenuItemNode = defineComponent({
                 }
             };
             return inner(menuList);
+        },
+        handleMenuClick (params: object): void {
+            this.$emit('menu-click', params);
         }
     },
     render () {
         const { MenuList = [] } = this;
         return (
-            <Menu theme='dark' mode={'inline'}>
+            <Menu theme='dark' mode={'inline'} onClick={this.handleMenuClick}>
                 {
                     MenuList.length ?
                         MenuList.map((item: any): any => {

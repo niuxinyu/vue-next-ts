@@ -1,6 +1,6 @@
 <template>
   <Card>
-    <h1>这是用户</h1>
+    <h1>这是other页面</h1>
   </Card>
 </template>
 
@@ -9,7 +9,7 @@ import { defineComponent } from 'vue';
 import { Card } from 'ant-design-vue';
 
 export default defineComponent({
-  name: 'User',
+  name: 'index',
   components: {
     Card
   }

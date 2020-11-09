@@ -1,5 +1,5 @@
 import Main from '@/components/Main/Main.vue';
-import { HomeFilled } from '@ant-design/icons-vue';
+import { HomeFilled, DotChartOutlined, UserOutlined } from '@ant-design/icons-vue';
 
 const routes: Array<any> = [
     {
@@ -26,7 +26,8 @@ const routes: Array<any> = [
         path: '/user',
         name: 'user',
         meta: {
-            title: '用户'
+            title: '用户',
+            icon: UserOutlined
         },
         component: Main,
         children: [
@@ -34,25 +35,10 @@ const routes: Array<any> = [
                 path: '/user/user-page',
                 name: 'user-page',
                 meta: {
-                    title: '用户1'
+                    title: '用户1',
+                    icon: UserOutlined
                 },
-                component: () => import('@/views/User/User.vue'),
-                children: [
-                    {
-                        path: '/user/avatar',
-                        name: 'avatar',
-                        meta: {
-                            title: '头像1'
-                        }
-                    }
-                ]
-            },
-            {
-                path: '/name',
-                name: 'name',
-                meta: {
-                    title: '姓名'
-                }
+                component: () => import('@/views/User/User.vue')
             }
         ]
     },
@@ -60,8 +46,21 @@ const routes: Array<any> = [
         path: '/other',
         name: 'other',
         meta: {
-            title: '其他'
-        }
+            title: '其他',
+            icon: DotChartOutlined
+        },
+        component: Main,
+        children: [
+            {
+                path: 'other-page',
+                name: 'other-page',
+                meta: {
+                    title: '其他',
+                    icon: DotChartOutlined
+                },
+                component: () => import('@/views/Other/index.vue')
+            }
+        ]
     }
 ];
 

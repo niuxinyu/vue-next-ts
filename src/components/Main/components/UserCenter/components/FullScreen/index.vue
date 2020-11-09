@@ -1,8 +1,8 @@
 <template>
-  <div class="full-screen" @click="handleFullscreen">
+  <div class="full-screen" @click="handleFullScreenChange">
     <Tooltip>
       <template v-slot:title>
-        全屏
+        {{modelValue ? t('exitFullscreen') : t('fullScreen')}}
       </template>
       <FullscreenOutlined/>
     </Tooltip>
@@ -10,9 +10,10 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
-import {Tooltip} from 'ant-design-vue';
-import {FullscreenOutlined} from '@ant-design/icons-vue';
+import { defineComponent } from 'vue';
+import { Tooltip } from 'ant-design-vue';
+import { FullscreenOutlined } from '@ant-design/icons-vue';
+import { usei18n } from '@/libs/tools';
 
 interface CustomDocument extends Document {
   mozFullScreenElement?: Element;
@@ -32,63 +33,88 @@ export default defineComponent({
     Tooltip
   },
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: false
     }
   },
-  data() {
+  setup () {
+    const msg = {
+      messages: {
+        'zh-CN': {
+          fullScreen: '全屏',
+          exitFullscreen: '退出全屏'
+        },
+        'zh-TW': {
+          fullScreen: '全屏',
+          exitFullscreen: '退出全屏'
+        },
+        'en-US': {
+          fullScreen: 'full screen',
+          exitFullscreen: 'exit full screen'
+        }
+      }
+    };
+    return {
+      ...usei18n(msg)
+    };
+  },
+  data () {
     return {
       visible: false
     };
   },
   methods: {
-    handleFullscreen() {
+    handleFullScreenChange () {
+      this.handleFullscreen();
+    },
+    handleFullscreen () {
       // 全屏进入和退出
       const main: any = document.body;
-      const el = <CustomDocument>document;
-      if (this.value) {
+      const el: CustomDocument = document;
+      if (this.modelValue) {
         if (el.exitFullscreen) {
           el.exitFullscreen();
-        } else if (el.mozCancelFullScreen) {
+        }
+        else if (el.mozCancelFullScreen) {
           el.mozCancelFullScreen();
-        } else if (el.webkitCancelFullScreen) {
+        }
+        else if (el.webkitCancelFullScreen) {
           el.webkitCancelFullScreen();
-        } else if (el.msExitFullscreen) {
+        }
+        else if (el.msExitFullscreen) {
           el.msExitFullscreen();
         }
-      } else if (main.requestFullscreen) {
-        main.requestFullscreen();
-      } else if (main.mozRequestFullScreen) {
-        main.mozRequestFullScreen();
-      } else if (main.webkitRequestFullScreen) {
-        main.webkitRequestFullScreen();
-      } else if (main.msRequestFullscreen) {
-        main.msRequestFullscreen();
       }
+      else {
+        if (main.requestFullscreen) {
+          main.requestFullscreen();
+        }
+        else if (main.mozRequestFullScreen) {
+          main.mozRequestFullScreen();
+        }
+        else if (main.webkitRequestFullScreen) {
+          main.webkitRequestFullScreen();
+        }
+        else if (main.msRequestFullscreen) {
+          main.msRequestFullscreen();
+        }
+      }
+    },
+    handleToggleFullScreen () {
+      this.$emit('update:modelValue', !this.modelValue);
+      this.$emit('on-change', !this.modelValue);
     }
   },
-  mounted() {
-    const el = <CustomDocument>document;
+  mounted () {
+    const el: CustomDocument = document;
     let isFullscreen: any = el.fullscreenElement || el.mozFullScreenElement || el.webkitFullscreenElement || el.fullScreen || el.mozFullScreen || el.webkitIsFullScreen;
     isFullscreen = !!isFullscreen;
-    document.addEventListener('fullscreenchange', () => {
-      this.$emit('input', !this.value);
-      this.$emit('on-change', !this.value);
-    });
-    document.addEventListener('mozfullscreenchange', () => {
-      this.$emit('input', !this.value);
-      this.$emit('on-change', !this.value);
-    });
-    document.addEventListener('webkitfullscreenchange', () => {
-      this.$emit('input', !this.value);
-      this.$emit('on-change', !this.value);
-    });
-    document.addEventListener('msfullscreenchange', () => {
-      this.$emit('input', !this.value);
-      this.$emit('on-change', !this.value);
-    });
-    this.$emit('input', isFullscreen);
+    document.addEventListener('fullscreenchange', this.handleToggleFullScreen);
+    document.addEventListener('mozfullscreenchange', this.handleToggleFullScreen);
+    document.addEventListener('webkitfullscreenchange', this.handleToggleFullScreen);
+    document.addEventListener('msfullscreenchange', this.handleToggleFullScreen);
+    this.$emit('update:modelValue', isFullscreen);
   }
 });
 </script>

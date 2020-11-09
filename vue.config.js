@@ -1,12 +1,6 @@
 const path = require('path');
 
 module.exports = {
-    // pluginOptions: {
-    //   'style-resources-loader': {
-    //     preProcessor: 'less',
-    //     patterns: [path.resolve(__dirname, './src/theme/index.less')]
-    //   }
-    // }
     css: {
         loaderOptions: {
             less: {
@@ -15,11 +9,15 @@ module.exports = {
             }
         }
     },
-
     pluginOptions: {
-      'style-resources-loader': {
-        preProcessor: 'less',
-        patterns: [path.resolve(__dirname, './src/theme/index.less')]
-      }
+        'style-resources-loader': {
+            preProcessor: 'less',
+            patterns: [path.resolve(__dirname, './src/theme/index.less')]
+        }
+    },
+    configureWebpack: {
+        resolve: {
+            extensions: ['.vue', '.js', '.ts', '.jsx', '.tsx']
+        }
     }
 };

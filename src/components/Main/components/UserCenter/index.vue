@@ -1,6 +1,6 @@
 <template>
   <div class="user-center">
-    <FullScreen/>
+    <FullScreen v-model="shouldFullScreen"/>
     <Notice class="notice"></Notice>
     <User class="user"></User>
     <Language class="language"></Language>
@@ -21,6 +21,11 @@ export default defineComponent({
     User,
     Language,
     FullScreen
+  },
+  data () {
+    return {
+      shouldFullScreen: false
+    };
   }
 });
 </script>

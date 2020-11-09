@@ -10,8 +10,11 @@ module.exports = {
         'space-before-blocks': 2,
         'no-irregular-whitespace': 2, //不规则的空白不允许
         'no-trailing-spaces': 2, //一行结束后面有空格就发出警告
-        'semi': [2, 'always'],//语句强制分号结尾
-        'space-before-function-paren': 2,
+        'semi': [2, 'always'], //语句强制分号结尾
+        'space-before-function-paren': 2, //
+        'eol-last': 'error', // 要求文件末尾保留一行空行
+        'newline-per-chained-call': ['error', { 'ignoreChainWithDepth': 2 }], //要求方法链中每个调用都有一个换行符
+        'brace-style': ['error', 'stroustrup'], // if else 等语句的换行规则 报错 必须换行
         // 允许在ts内使用var和require
         '@typescript-eslint/no-var-requires': 0,
         '@typescript-eslint/ban-ts-ignore': 0

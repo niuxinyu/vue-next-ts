@@ -5,5 +5,6 @@ export default {
     'user-page': 'UserPage',
     avatar: 'avatar',
     name: 'name',
-    other: 'other'
+    other: 'other',
+    'other-page': 'other'
 };

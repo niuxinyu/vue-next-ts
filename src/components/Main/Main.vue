@@ -6,7 +6,7 @@
           :minLogo="MinLogo"
           :collapsed="collapsed"
       ></Logo>
-      <MenuNode :MenuList="siders"/>
+      <MenuNode :MenuList="siders" @menu-click="handleTurnPage"/>
     </Sider>
     <Layout>
       <Header class="header">
@@ -22,8 +22,13 @@
           <UserCenter></UserCenter>
         </div>
       </Header>
-      <Content>
-        <RouterView/>
+      <Content class="layout-body">
+        <Layout>
+          <TagsNav :tags-nav-list="getTagsNavList"/>
+        </Layout>
+        <Content>
+          <RouterView/>
+        </Content>
       </Content>
     </Layout>
   </Layout>
@@ -38,6 +43,9 @@ import MaxLogo from '@/assets/images/max-logo-slow.gif';
 import MinLogo from '@/assets/images/min-logo-slow.gif';
 import { defineComponent } from 'vue';
 import UserCenter from './components/UserCenter/index.vue';
+import TagsNav from './components/TagsNav/index.vue';
+import { mapMutations, mapGetters } from 'vuex';
+import { TagNavItem } from '@/types';
 
 export default defineComponent({
   name: 'Main',
@@ -50,7 +58,8 @@ export default defineComponent({
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     Logo,
-    UserCenter
+    UserCenter,
+    TagsNav
   },
   setup () {
     return {
@@ -67,6 +76,36 @@ export default defineComponent({
   methods: {
     handleCollapsed () {
       this.collapsed = !this.collapsed;
+    },
+    handleTurnPage (params: { key: string }) {
+      this.$router.push({
+        name: params.key
+      });
+    },
+    ...mapMutations([
+      'addTag',
+      'setTagNavList'
+    ])
+  },
+  mounted () {
+    // this.setTagNavList();
+    const { name, meta, params, query } = this.$route;
+    this.addTag({
+      route: { name, meta, params, query },
+      type: 'push'
+    });
+  },
+  computed: {
+    ...mapGetters([
+      'getTagsNavList'
+    ])
+  },
+  watch: {
+    '$route' (newVal: TagNavItem): void {
+      const { name, meta, params, query } = newVal;
+      this.addTag({
+        route: { name, meta, params, query }
+      });
     }
   }
 });
@@ -102,4 +141,7 @@ export default defineComponent({
   }
 }
 
+.layout-body {
+  padding: 24px 24px 0;
+}
 </style>

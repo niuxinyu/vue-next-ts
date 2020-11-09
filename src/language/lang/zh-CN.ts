@@ -5,5 +5,6 @@ export default {
     'user-page': '用户1',
     avatar: '头像',
     name: '姓名',
-    other: '其他'
+    other: '其他',
+    'other-page': '其他'
 };
