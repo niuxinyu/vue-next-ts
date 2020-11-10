@@ -1,19 +1,17 @@
 import config from '@/config';
-import { routeHasExist } from '@/libs/utils';
-import { TagNavItem } from '@/types';
+import { routeHasExist, getNextRoute } from '@/libs/utils';
 import { localRead, localSave } from "@/libs/tools";
+import { State, AddTag } from './app.types';
+import { TagNavItem } from '@/types';
 
 const homeName = config.homeName;
 const tagsNavList = 'tagsNavList';
 
-interface State {
-    list: TagNavItem[];
-}
 
-interface AddTag {
-    route: TagNavItem;
-    type: string;
-}
+const closePage = (state: State, route: TagNavItem): void => {
+    const nextRoute = getNextRoute(state, route);
+};
+
 
 export default {
     state: {
@@ -35,6 +33,18 @@ export default {
                     }
                 }
                 localSave(tagsNavList, state.list);
+            }
+        },
+        closeTag (state: State, payload: TagNavItem): void {
+            if (payload.name === config.homeName) {
+                return;
+            }
+            else {
+                const targetIndex = state.list.findIndex((item: TagNavItem) => item.name === payload.name);
+                if (targetIndex > 0) {
+                    state.list.splice(targetIndex, 1);
+                    closePage(state, payload);
+                }
             }
         },
         setTagNavList (state: State, payload: any): void {

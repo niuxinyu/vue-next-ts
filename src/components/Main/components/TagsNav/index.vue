@@ -26,6 +26,7 @@ import { TagNavItem } from "@/types";
 import { CloseOutlined } from '@/components/Icon';
 import config from '@/config';
 import beforeClose from '@/router/before-close';
+import { mapMutations } from 'vuex';
 
 interface TagsNavProps {
   tagsNavList: TagNavItem[];
@@ -71,10 +72,14 @@ export default defineComponent({
     },
     handleCanCloseTabs (params: TagNavItem): void {
       const res = this.tagsNavList.filter((item: any) => item.name === params.name);
+      this.closeTag(res[0]);
     },
     getTagNavTitle (item: TagNavItem) {
       return item.meta.title;
-    }
+    },
+    ...mapMutations([
+        'closeTag'
+    ])
   },
   computed: {
     shouldShowCloseable () {
