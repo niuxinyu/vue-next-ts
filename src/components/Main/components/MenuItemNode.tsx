@@ -8,6 +8,7 @@ import config from '@/config';
 interface CustomData {
     menuActiveList: string[];
     menuOpenList: string[];
+    component: string;
 }
 
 const MenuItemNode = defineComponent({
@@ -20,8 +21,9 @@ const MenuItemNode = defineComponent({
     },
     data (): CustomData {
         return {
-            menuActiveList: [],
-            menuOpenList: ['home']
+            menuActiveList: [''],
+            menuOpenList: [''],
+            component: ''
         };
     },
     methods: {
@@ -66,6 +68,9 @@ const MenuItemNode = defineComponent({
         },
         handleMenuClick (params: object): void {
             this.$emit('menu-click', params);
+        },
+        handleUpdateOpenKeys (params: any): void {
+            console.log(params);
         }
     },
     created () {
@@ -75,11 +80,14 @@ const MenuItemNode = defineComponent({
     render () {
         const { MenuList = [] } = this;
         // jsx https://github.com/vuejs/jsx-next/blob/dev/packages/babel-plugin-jsx/README-zh_CN.md
+        // jsx 不支持 多个v-model https://github.com/vuejs/jsx-next/issues/166
         return (
             <Menu
                 theme='dark'
                 mode={'inline'}
-                v-model={[[this.menuActiveList, this.menuOpenList], ['selectedKeys', 'openKeys']]}
+                v-model={[this.menuActiveList, 'selectedKeys']}
+                openKeys={this.menuOpenList}
+                on-update-openKeys={this.handleUpdateOpenKeys}
                 onClick={this.handleMenuClick}
             >
                 {
