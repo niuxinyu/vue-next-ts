@@ -46,6 +46,7 @@ import UserCenter from './components/UserCenter/index.vue';
 import TagsNav from './components/TagsNav/index.vue';
 import { mapMutations, mapGetters } from 'vuex';
 import { TagNavItem } from '@/types';
+import config from '@/config';
 
 export default defineComponent({
   name: 'Main',
@@ -88,11 +89,14 @@ export default defineComponent({
     ])
   },
   mounted () {
-    // this.setTagNavList();
+    this.setTagNavList();
     const { name, meta, params, query } = this.$route;
     this.addTag({
       route: { name, meta, params, query }
     });
+    if (!this.getTagsNavList.find((item: TagNavItem) => item.name === this.$route.name)) {
+      this.$router.push({ name: config.homeName });
+    }
   },
   computed: {
     ...mapGetters([

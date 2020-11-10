@@ -3,17 +3,16 @@
     <Tabs
         v-model:activeKey="activeKey"
         type="card"
-        @change="handleTabsChange"
     >
       <TabPane
           v-for="item in tagsNavList"
           :key="item.name"
       >
         <template v-slot:tab>
-          <div class="tab">
+          <div class="tab" @click="() => handleTabsClick(item)">
             {{ getTagNavTitle(item) }}
           </div>
-          <CloseOutlined v-if="shouldShowCloseable(item.name)" class="icon-close"/>
+          <CloseOutlined v-if="shouldShowCloseable(item.name)" class="icon-close" @click="() => handleTabsClose(item)"/>
         </template>
       </TabPane>
     </Tabs>
@@ -26,6 +25,11 @@ import { Tabs } from 'ant-design-vue';
 import { TagNavItem } from "@/types";
 import { CloseOutlined } from '@/components/Icon';
 import config from '@/config';
+import beforeClose from '@/router/before-close';
+
+interface TagsNavProps {
+  tagsNavList: TagNavItem[];
+}
 
 export default defineComponent({
   name: 'tags-nav',
@@ -50,10 +54,23 @@ export default defineComponent({
     };
   },
   methods: {
-    handleTabsChange (activeKey: string) {
+    handleTabsClick (params: TagNavItem) {
       this.$router.push({
-        name: activeKey
+        name: params.name
       });
+    },
+    handleTabsClose (params: TagNavItem) {
+      if (params.meta && params.meta.beforeCloseName && params.meta.beforeCloseName in beforeClose) {
+        new Promise(beforeClose[params.meta.beforeCloseName]).then(res => {
+          res && this.handleCanCloseTabs(params);
+        });
+      }
+      else {
+        this.handleCanCloseTabs(params);
+      }
+    },
+    handleCanCloseTabs (params: TagNavItem): void {
+      const res = this.tagsNavList.filter((item: any) => item.name === params.name);
     },
     getTagNavTitle (item: TagNavItem) {
       return item.meta.title;

@@ -77,6 +77,11 @@ const MenuItemNode = defineComponent({
         const name: string = this.$route.name as string;
         this.menuActiveList = name ? [name] : [config.homeName];
     },
+    watch: {
+        '$route' (newVal) {
+            this.menuActiveList = [newVal.name];
+        }
+    },
     render () {
         const { MenuList = [] } = this;
         // jsx https://github.com/vuejs/jsx-next/blob/dev/packages/babel-plugin-jsx/README-zh_CN.md
@@ -86,8 +91,6 @@ const MenuItemNode = defineComponent({
                 theme='dark'
                 mode={'inline'}
                 v-model={[this.menuActiveList, 'selectedKeys']}
-                openKeys={this.menuOpenList}
-                on-update-openKeys={this.handleUpdateOpenKeys}
                 onClick={this.handleMenuClick}
             >
                 {

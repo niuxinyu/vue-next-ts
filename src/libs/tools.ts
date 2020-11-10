@@ -22,3 +22,11 @@ export const getMenuName = (menu: any, vm: any): string => {
 export const usei18n = (options: UseI18nOptions): object => {
     return useI18n(options);
 };
+
+export const localSave = (key: string, params: any): void => {
+    window.localStorage.setItem(key, JSON.stringify(params));
+};
+
+export const localRead = (key: string): any => {
+    return window.localStorage.getItem(key);
+};
