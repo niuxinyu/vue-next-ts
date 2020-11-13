@@ -1,3 +1,7 @@
 export default {
-    homeName: 'home'
+    homeName: 'home',
+    baseURL: {
+        pro: '',
+        dev: ''
+    }
 };

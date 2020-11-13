@@ -1,5 +1,6 @@
 import { TagNavItem } from '@/types';
 import { State } from '@/store/module/app.types';
+import config from '@/config';
 
 /**
  * 判断给定的路由是否已经存在于TagsNavList中
@@ -9,13 +10,23 @@ export const routeHasExist = (tagsNavList: TagNavItem[], routerItem: TagNavItem)
 };
 
 /**
- * 获得可以跳转的下一个路由哦
+ * 获得可以跳转的下一个路由
  * **/
-export const getNextRoute = (state: State, list: TagNavItem): void => {
-    const res = {};
+export const getNextRoute = (state: State, route: TagNavItem): object => {
+    let res = {};
     if (state.list.length === 2) {
-        // res = getHomeRoute(state.list);
+        res = state.list.find((item: TagNavItem) => item.name === config.homeName)!;
     }
+    else {
+        const targetIndex = state.list.findIndex((item: TagNavItem) => item.name === route.name);
+        if (targetIndex === state.list.length - 1) {
+            res = state.list[state.list.length - 2];
+        }
+        else {
+            res = state.list[targetIndex + 1];
+        }
+    }
+    return res;
 };
 
 /**

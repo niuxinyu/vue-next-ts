@@ -3,13 +3,20 @@ import { routeHasExist, getNextRoute } from '@/libs/utils';
 import { localRead, localSave } from "@/libs/tools";
 import { State, AddTag } from './app.types';
 import { TagNavItem } from '@/types';
+import router from '@/router';
 
 const homeName = config.homeName;
 const tagsNavList = 'tagsNavList';
 
 
 const closePage = (state: State, route: TagNavItem): void => {
-    const nextRoute = getNextRoute(state, route);
+    const nextRoute = getNextRoute(state, route) as TagNavItem;
+    state.list = state.list.filter((item: TagNavItem) => {
+        return item.name !== route.name;
+    });
+    router.push({
+        name: nextRoute.name
+    });
 };
 
 
@@ -40,11 +47,12 @@ export default {
                 return;
             }
             else {
-                const targetIndex = state.list.findIndex((item: TagNavItem) => item.name === payload.name);
-                if (targetIndex > 0) {
-                    state.list.splice(targetIndex, 1);
-                    closePage(state, payload);
-                }
+                // const targetIndex = state.list.findIndex((item: TagNavItem) => item.name === payload.name);
+                // if (targetIndex > 0) {
+                //     state.list.splice(targetIndex, 1);
+                //     closePage(state, payload);
+                // }
+                closePage(state, payload);
             }
         },
         setTagNavList (state: State, payload: any): void {

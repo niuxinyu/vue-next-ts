@@ -51,7 +51,7 @@ export default defineComponent({
   },
   data () {
     return {
-      activeKey: this.$route.name
+      activeKey: ''
     };
   },
   methods: {
@@ -78,8 +78,11 @@ export default defineComponent({
       return item.meta.title;
     },
     ...mapMutations([
-        'closeTag'
+      'closeTag'
     ])
+  },
+  updated () {
+    console.log(this.activeKey);
   },
   computed: {
     shouldShowCloseable () {
@@ -87,8 +90,11 @@ export default defineComponent({
     }
   },
   watch: {
-    '$route' (newVal: TagNavItem) {
-      this.activeKey = newVal.name;
+    '$route': {
+      handler (newVal: TagNavItem) {
+        this.activeKey = newVal.name;
+      },
+      immediate: true
     }
   }
 });
