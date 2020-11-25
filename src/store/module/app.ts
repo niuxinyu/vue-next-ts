@@ -8,7 +8,7 @@ import router from '@/router';
 const homeName = config.homeName;
 const tagsNavList = 'tagsNavList';
 
-
+// 关闭标签页
 const closePage = (state: State, route: TagNavItem): void => {
     const nextRoute = getNextRoute(state, route) as TagNavItem;
     state.list = state.list.filter((item: TagNavItem) => {

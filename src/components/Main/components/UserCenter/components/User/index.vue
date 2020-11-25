@@ -4,16 +4,16 @@
       <Menu>
         <MenuItem>
           <UserOutlined/>
-          <span>个人中心</span>
+          <span>{{ t('userCenter') }}</span>
         </MenuItem>
         <MenuItem>
           <SettingOutlined/>
-          <span>设置</span>
+          <span>{{ t('setting') }}</span>
         </MenuItem>
         <MenuDivider/>
         <MenuItem>
           <PoweroffOutlined/>
-          <span>退出登录</span>
+          <span>{{ t('logout') }}</span>
         </MenuItem>
       </Menu>
     </template>
@@ -44,13 +44,22 @@ export default defineComponent({
     const msg = {
       messages: {
         'zh-CN': {
-          user: '用户中心'
+          user: '用户中心',
+          userCenter: '个人中心',
+          setting: '设置',
+          logout: '退出登录'
         },
         'zh-TW': {
-          user: '用戶中心'
+          user: '用戶中心',
+          userCenter: '個人中心',
+          setting: '設置',
+          logout: '退出登錄'
         },
         'en-US': {
-          user: 'UserCenter'
+          user: 'UserCenter',
+          userCenter: 'UserCenter',
+          setting: 'setting',
+          logout: 'logout'
         }
       }
     };

@@ -35,3 +35,18 @@ export const getNextRoute = (state: State, route: TagNavItem): object => {
 export const getHomeRoute = (list: TagNavItem[], homeName = ''): void => {
     //
 };
+
+/**
+ * 自动导入
+ * **/
+export const autoImport = (r: any): any[] => {
+    const __modules: any = [];
+    r.keys().forEach((k: any) => {
+        Object.keys(r(k)).forEach(key => {
+            __modules.push(
+                r(k)[key]
+            );
+        });
+    });
+    return __modules;
+};

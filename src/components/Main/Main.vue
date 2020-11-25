@@ -26,7 +26,7 @@
         <Layout>
           <TagsNav :tags-nav-list="getTagsNavList"/>
         </Layout>
-        <Content>
+        <Content :style="`margin-top: ${config.multiPage ? -24 : 0}px`">
           <RouterView/>
         </Content>
       </Content>
@@ -65,7 +65,8 @@ export default defineComponent({
   setup () {
     return {
       MaxLogo,
-      MinLogo
+      MinLogo,
+      config
     };
   },
   data () {
@@ -102,15 +103,6 @@ export default defineComponent({
     ...mapGetters([
       'getTagsNavList'
     ])
-  },
-  watch: {
-    '$route' (newVal: TagNavItem): void {
-      const { name, meta, params, query } = newVal;
-      this.addTag({
-        route: { name, meta, params, query },
-        type: 'push'
-      });
-    }
   }
 });
 </script>
