@@ -26,7 +26,7 @@
         <Layout>
           <TagsNav :tags-nav-list="getTagsNavList"/>
         </Layout>
-        <Content :style="`margin-top: ${config.multiPage ? -24 : 0}px`">
+        <Content :style="`margin-top: ${config.multiPage ? -16 : 0}px`">
           <RouterView/>
         </Content>
       </Content>

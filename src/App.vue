@@ -3,8 +3,13 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
+import NProgress from "@/components/NProgress/NProgress";
 export default defineComponent({
-  name: 'App'
+  name: 'App',
+  created () {
+    const nprogress = new NProgress();
+    nprogress.set(0);
+  }
 });
 </script>
 <style>

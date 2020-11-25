@@ -1,15 +1,19 @@
 <template>
-  <n-card>
+  <Card>
     <h1>
       {{ $t('home') }}
     </h1>
-  </n-card>
+  </Card>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { Card } from 'ant-design-vue';
 
 @Options({
+  components: {
+    Card
+  }
 })
 
 export default class Home extends Vue {

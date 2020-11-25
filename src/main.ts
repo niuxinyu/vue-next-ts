@@ -4,6 +4,7 @@ import './registerServiceWorker';
 import router from './router';
 import store from './store';
 import { InstallCustomCom } from "@/plugins/CustomInstallCom";
+import '@/components/NProgress/NProgress.less';
 
 // antd vue
 import 'ant-design-vue/dist/antd.css';

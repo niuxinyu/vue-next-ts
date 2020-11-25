@@ -1,6 +1,7 @@
 <template>
   <div class="tags-nav">
     <Tabs
+        class="tabs"
         v-model:activeKey="activeKey"
         type="card"
     >
@@ -70,15 +71,19 @@ export default defineComponent({
           res && this.handleCanCloseTabs(params);
         });
       }
- else {
+      else {
         this.handleCanCloseTabs(params);
       }
     },
     handleCanCloseTabs (params: TagNavItem): void {
-      const res = this.tagsNavList.filter((item: any) => item.name === params.name);
-      this.closeTag(res[0]);
-      const newTagList = this.tagsNavList.filter((item: any) => item.name !== params.name);
-
+      if (this.$route.name !== params.name) {
+        const newTagList = this.tagsNavList.filter((item: any) => item.name !== params.name);
+        this.setTagNavList(newTagList);
+      }
+      else {
+        const res = this.tagsNavList.filter((item: any) => item.name === params.name);
+        this.closeTag(res[0]);
+      }
     },
     getTagNavTitle (item: TagNavItem) {
       return item.meta.title;
@@ -106,8 +111,7 @@ export default defineComponent({
           route: { name, meta, params, query },
           type: 'push'
         });
-      },
-      deep: true
+      }
     }
   }
 });
@@ -131,6 +135,12 @@ export default defineComponent({
   .size;
 }
 
+.tabs {
+  ::v-deep .ant-tabs-tab {
+    margin-right: 4px !important;
+  }
+}
+
 .tab {
   display: inline-block;
   margin: 0 -16px;
@@ -141,7 +151,7 @@ export default defineComponent({
 }
 
 .icon-close {
-  font-size: 12px;
+  font-size: 13px;
   margin-left: 6px;
   margin-right: -4px !important;
   color: rgba(0, 0, 0, 0.45);
