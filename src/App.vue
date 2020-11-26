@@ -4,11 +4,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import NProgress from "@/components/NProgress/NProgress";
+
 export default defineComponent({
   name: 'App',
-  created () {
-    const nprogress = new NProgress();
-    nprogress.set(0);
+  mounted () {
+    this.$nextTick(() => {
+      const nprogress = new NProgress();
+      nprogress.start();
+    });
   }
 });
 </script>
