@@ -192,6 +192,7 @@ class NProgress {
         speed: 200,
         easing: 'ease',
         trickle: true,
+        trickleSpeed: 800,
         positionUsing: '', // 兼容化处理 应用何种偏移方式
         barSelector: '[role=bar]',
         template: '<div role="bar" class="bar"><div class="peg"></div></div>'
@@ -277,6 +278,12 @@ class NProgress {
 
     public start () {
         if (!this.status) this.set(0);
+
+        const work = () => {
+            setTimeout(() => {
+                if (!this.status) return;
+            });
+        };
     }
 }
 

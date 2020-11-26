@@ -3,7 +3,7 @@ import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
 import store from './store';
-import { InstallCustomCom } from "@/plugins/CustomInstallCom";
+// import { InstallCustomCom } from "@/plugins/CustomInstallCom";
 import '@/components/NProgress/NProgress.less';
 
 // antd vue
@@ -14,7 +14,7 @@ import './theme/index.less';
 import i18n from "@/language";
 
 const app = createApp(App as any);
-InstallCustomCom(app);
+// InstallCustomCom(app);
 app
     .use(store)
     .use(router)
