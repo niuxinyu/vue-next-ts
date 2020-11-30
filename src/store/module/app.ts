@@ -4,6 +4,7 @@ import { localRead, localSave } from "@/libs/tools";
 import { State, AddTag } from './app.types';
 import { TagNavItem } from '@/types';
 import router from '@/router';
+import { Router } from "vue-router";
 
 const homeName = config.homeName;
 const tagsNavList = 'tagsNavList';
@@ -21,8 +22,10 @@ const closePage = (state: State, route: TagNavItem): void => {
 
 
 export default {
+    namespace: true,
     state: {
-        list: []
+        list: [],
+        routesConfig: []
     },
     mutations: {
         addTag (state: State, payload: AddTag): void {
@@ -71,6 +74,10 @@ export default {
             }
             state.list = tagList;
             localSave(tagsNavList, state.list);
+        },
+        setRouterConfig (state: State, payload: Router[]) {
+            console.log(666);
+            state.routerConfig = payload;
         }
     },
     getters: {

@@ -1,5 +1,5 @@
+import { DotChartOutlined, HomeFilled, UserOutlined } from "@ant-design/icons-vue";
 import Main from '@/components/Main/Main.vue';
-import { HomeFilled, DotChartOutlined, UserOutlined } from '@ant-design/icons-vue';
 
 const routes: Array<any> = [
     {

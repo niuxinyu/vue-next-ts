@@ -1,3 +1,12 @@
+/**
+ * 接口
+ * start 开始
+ * done 结束 必须调用
+ * set 手动设置开始值 0~1
+ * increments 手动增加值
+ * **/
+
+
 interface NObject {
     [key: string]: any;
 }
@@ -148,11 +157,13 @@ class Utils {
                     value;
                 if (args.length === 2) {
                     for (prop in properties) {
-                        value = properties[prop];
-                        // 必须保证 prop 不是对象内的属性 不能是继承自原型链的属性
-                        // 直接使用 properties 的 hasOwnProperty 方法在极端情况下会报错
-                        // https://juejin.cn/post/6844903881437085709
-                        if (value !== undefined && Object.prototype.hasOwnProperty.call(properties, prop)) applyCss(element, prop, value);
+                        if (Object.prototype.hasOwnProperty.call(properties, prop)) {
+                            value = properties[prop];
+                            // 必须保证 prop 不是对象内的属性 不能是继承自原型链的属性
+                            // 直接使用 properties 的 hasOwnProperty 方法在极端情况下会报错
+                            // https://juejin.cn/post/6844903881437085709
+                            if (value !== undefined) applyCss(element, prop, value);
+                        }
                     }
                 }
                 else {
@@ -186,15 +197,31 @@ class Utils {
 
 
 class NProgress {
-    public Settings = {
+    public Settings: any = {
         minimum: 0.08, // 开始进度条的最小值
         parent: 'body', // 挂载到哪里
         speed: 200,
         easing: 'ease',
         trickle: true,
+        trickleRate: 0.02,
+        trickleSpeed: 800, // 增量速度 每多少毫秒增加一次
         positionUsing: '', // 兼容化处理 应用何种偏移方式
+        showSpinner: true, // 是否显示加载中
         barSelector: '[role=bar]',
-        template: '<div role="bar" class="bar"><div class="peg"></div></div>'
+        spinnerSelector: '[role=spinner]',
+        template: '<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
+    }
+
+    public configure (options: NObject): NProgress {
+        let key: string;
+        let value: any;
+        for (key in options) {
+            if (Object.prototype.hasOwnProperty.call(options, key)) {
+                value = options[key];
+                if (value !== undefined) this.Settings[key] = value;
+            }
+        }
+        return this;
     }
 
     public status: any; // 当前是否开始进度条 开始的化 此值为当前进度；否则为null
@@ -211,11 +238,21 @@ class NProgress {
         const parent = document.querySelector(this.Settings.parent) as HTMLElement,
             bar = nprogress.querySelector(this.Settings.barSelector) as HTMLElement,
             percent = isStarted ? '-100' : Utils.toBarPercent(this.status || 0);
+        let spinner: HTMLElement;
 
         Utils.css(bar, {
             transition: 'all 0 liner',
             transform: 'translate3d(' + percent + '%, 0, 0)'
         });
+
+        if (!this.Settings.showSpinner) {
+            spinner = nprogress.querySelector(this.Settings.spinnerSelector);
+            spinner && Utils.removeElement(spinner);
+        }
+
+        if (parent !== document.body) {
+            Utils.addClass(parent, 'nprogress-custom-paren');
+        }
 
         parent.appendChild(nprogress);
 
@@ -232,7 +269,7 @@ class NProgress {
     /**
      * n 0.0 - 1.0
      * **/
-    public set (n: number): void {
+    public set (n: number) {
         const started = Utils.isStarted(this.status);
         n = Utils.findMinimum(n, this.Settings.minimum, 1);
         this.status = (n === 1 ? null : n);
@@ -273,10 +310,53 @@ class NProgress {
                 setTimeout(next, speed);
             }
         });
+
+        return this;
     }
 
     public start () {
         if (!this.status) this.set(0);
+
+        const work = () => {
+            setTimeout(() => {
+                if (!this.status) return;
+                this.trickle();
+                work();
+            }, this.Settings.trickleSpeed);
+        };
+
+        if (this.Settings.trickle) work();
+
+        return this;
+    }
+
+    public done (params?: boolean) {
+        if (!params && !this.status) return this;
+        return this.increments(0.3 + 0.5 * Math.random()).set(1);
+    }
+
+    public trickle (): any {
+        return this.increments(Math.random() * this.Settings.trickleRate);
+    }
+
+    // 根据当前进度随机增量
+    public increments (amount?: number): NProgress {
+        let n = this.status;
+        if (!n) {
+            return this.start();
+        }
+        else {
+            if (typeof amount !== 'number') {
+                amount = (1 - n) * Utils.findMinimum(Math.random() * n, 0.1, 0.95);
+            }
+
+            n = Utils.findMinimum(n + amount, 0, 0.994);
+            return this.set(n);
+        }
+    }
+
+    public isStarted (): boolean {
+        return Utils.isStarted(this.status);
     }
 }
 

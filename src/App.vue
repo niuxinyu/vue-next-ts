@@ -6,13 +6,7 @@ import { defineComponent } from 'vue';
 import NProgress from "@/components/NProgress/NProgress";
 
 export default defineComponent({
-  name: 'App',
-  mounted () {
-    this.$nextTick(() => {
-      const nprogress = new NProgress();
-      nprogress.start();
-    });
-  }
+  name: 'App'
 });
 </script>
 <style>

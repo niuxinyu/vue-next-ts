@@ -1,5 +1,9 @@
 import { createI18n, useI18n, UseI18nOptions } from 'vue-i18n';
 
+interface CusObject {
+    [key: string]: any;
+}
+
 export const initI18n = (locale: any, fallback: any, messages?: object): any => {
     const i18nOptions = {
         locale,
@@ -29,4 +33,8 @@ export const localSave = (key: string, params: any): void => {
 
 export const localRead = (key: string): any => {
     return window.localStorage.getItem(key);
+};
+
+export const hasOwnProperty = (source: CusObject, key: string): boolean => {
+    return Object.prototype.hasOwnProperty.call(source, key);
 };
