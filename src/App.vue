@@ -1,5 +1,9 @@
 <template>
-  <router-view></router-view>
+  <ConfigProvider :locale="locale">
+    <div id="app">
+      <router-view></router-view>
+    </div>
+  </ConfigProvider>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
@@ -10,6 +14,11 @@ export default defineComponent({
   name: 'App',
   components: {
     ConfigProvider
+  },
+  data () {
+    return {
+      locale: zh_CN
+    };
   }
 });
 </script>
