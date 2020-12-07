@@ -8,7 +8,7 @@ import '@/components/NProgress/NProgress.less';
 import bootstrap from '@/bootstrap';
 
 // antd vue
-import 'ant-design-vue/dist/antd.css';
+// import 'ant-design-vue/dist/antd.css';
 import './theme/index.less';
 
 // vue i18n

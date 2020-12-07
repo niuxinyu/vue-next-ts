@@ -1,9 +1,5 @@
 <template>
-  <ConfigProvider>
-    <div id="app">
-      <router-view></router-view>
-    </div>
-  </ConfigProvider>
+  <router-view></router-view>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';

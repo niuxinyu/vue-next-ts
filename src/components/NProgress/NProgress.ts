@@ -284,7 +284,6 @@ class NProgress {
 
             if (n === 1) {
                 // 动画结束
-                // ? 这块进行了什么操作 需要再理解
                 Utils.css(
                     nprogress, {
                         transition: 'none',
@@ -300,7 +299,6 @@ class NProgress {
                     );
                     setTimeout(() => {
                         this.remove();
-                        // 调用完remove之后又重新调用了一次next --> 意思应该是又执行了一次这个方法
                         next();
                     }, speed);
                 }, speed);

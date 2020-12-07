@@ -76,7 +76,6 @@ export default {
             localSave(tagsNavList, state.list);
         },
         setRouterConfig (state: State, payload: Router[]) {
-            console.log(666);
             state.routerConfig = payload;
         }
     },
