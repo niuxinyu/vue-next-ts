@@ -1,10 +1,9 @@
 import axios from 'axios';
 import config from '@/config';
-import { AxiosInstance } from 'axios';
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-interface AxiosOptions {
+interface AxiosOptions extends AxiosRequestConfig{
     url: string;
-    method: string;
     data?: any;
     params?: any;
     headers?: object;
@@ -47,6 +46,7 @@ class HttpRequest {
         const instance = axios.create();
         options = Object.assign(this.getDefaultConfig(), options);
         this.interceptors(instance, options.url);
+        return instance(options);
     }
 }
 
