@@ -13,10 +13,12 @@ module.exports = {
         'semi': [2, 'always'], //语句强制分号结尾
         'space-before-function-paren': 2, //
         'eol-last': 'error', // 要求文件末尾保留一行空行
-        'brace-style': ['error', 'stroustrup'], // if else 等语句的换行规则 报错 必须换行
+        'brace-style': ['error', 'stroustrup'], // if else 等语句的换行规则 报错 必须换行,
+        'camelcase': 0,
         // 允许在ts内使用var和require
         '@typescript-eslint/no-var-requires': 0,
-        '@typescript-eslint/ban-ts-ignore': 0
+        '@typescript-eslint/ban-ts-ignore': 0,
+        '@typescript-eslint/camelcase': 0
     },
     env: {
         node: true

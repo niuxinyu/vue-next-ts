@@ -1,12 +1,20 @@
 <template>
-  <router-view></router-view>
+  <ConfigProvider>
+    <div id="app">
+      <router-view></router-view>
+    </div>
+  </ConfigProvider>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import NProgress from "@/components/NProgress/NProgress";
+import { ConfigProvider } from 'ant-design-vue';
+import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN.js';
 
 export default defineComponent({
-  name: 'App'
+  name: 'App',
+  components: {
+    ConfigProvider
+  }
 });
 </script>
 <style>
