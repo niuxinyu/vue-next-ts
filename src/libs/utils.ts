@@ -39,7 +39,7 @@ export const getHomeRoute = (list: TagNavItem[], homeName = ''): void => {
 /**
  * 自动导入
  * **/
-export const autoImport = (r: any): any[] => {
+export const autoImport = (r: __WebpackModuleApi.RequireContext): any[] => {
     const __modules: any = [];
     r.keys().forEach((k: any) => {
         Object.keys(r(k)).forEach(key => {

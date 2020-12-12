@@ -16,3 +16,14 @@ export const loadRouter = (RouterConfig?: Router[]) => {
         store.commit('app/setRouterConfig', RouterConfig);
     }
 };
+
+export const loadGuards = (guards: { beforeEach: Function[]; afterEach: Function[] }, options: AppBaseOptions): void => {
+    const { beforeEach, afterEach } = guards;
+    const { router } = options;
+    beforeEach.forEach((guard: Function) => {
+        router.beforeEach((to, from, next) => guard(to, from, next));
+    });
+    afterEach.forEach((guard: Function) => {
+        router.beforeEach((to, from) => guard(to, from, options));
+    });
+};

@@ -90,7 +90,6 @@ export default defineComponent({
     ])
   },
   mounted () {
-    console.log(this.$router.options.routes);
     this.setTagNavList();
     const { name, meta, params, query } = this.$route;
     this.addTag({

@@ -1,12 +1,28 @@
-import NProgress from "@/components/NProgress/NProgress";
+import { NavigationGuardNext } from "vue-router";
+import { AppBaseOptions } from "@/types";
+import { Route } from "ant-design-vue/types/breadcrumb/breadcrumb";
+const NProgress = require('@niu_/tools-nprogress');
 
 const progress = new NProgress().configure({ showSpinner: false });
 
-const progressStart = (to: Function, from: Function, next: Function) => {
+interface Guard {
+    (to: Route, from: Route, next: NavigationGuardNext, options: AppBaseOptions): void;
+}
+
+const progressStart: Guard = (to, from, next) => {
     if (!progress.isStarted()) {
         progress.start();
     }
     next();
+};
+
+const progressDone = () => {
+    progress.done();
+};
+
+export default {
+    beforeEach: [progressStart],
+    afterEach: [progressDone]
 };
 
 
