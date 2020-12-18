@@ -1,7 +1,7 @@
 import { NavigationGuardNext } from "vue-router";
 import { AppBaseOptions } from "@/types";
 import { Route } from "ant-design-vue/types/breadcrumb/breadcrumb";
-const NProgress = require('@niu_/tools-nprogress');
+import NProgress  from '@niu_/tools-nprogress';
 
 const progress = new NProgress().configure({ showSpinner: false });
 
