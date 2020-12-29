@@ -1,17 +1,16 @@
 <template>
   <div class="full-screen" @click="handleFullScreenChange">
-    <Tooltip>
+    <ATooltip>
       <template v-slot:title>
         {{modelValue ? t('exitFullscreen') : t('fullScreen')}}
       </template>
       <FullscreenOutlined/>
-    </Tooltip>
+    </ATooltip>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Tooltip } from 'ant-design-vue';
 import { FullscreenOutlined } from '@ant-design/icons-vue';
 import { usei18n } from '@/libs/tools';
 
@@ -29,8 +28,7 @@ interface CustomDocument extends Document {
 export default defineComponent({
   name: 'FullScreen',
   components: {
-    FullscreenOutlined,
-    Tooltip
+    FullscreenOutlined
   },
   props: {
     modelValue: {

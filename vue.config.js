@@ -11,8 +11,10 @@ module.exports = {
     },
     pluginOptions: {
         'style-resources-loader': {
-            preProcessor: 'less',
-            patterns: [path.resolve(__dirname, './src/theme/index.less')]
+          preProcessor: 'less',
+          patterns: [
+            'D:\\Personal\\vue3.0\\vue-next-ts\\src\\theme\\index.less'
+          ]
         }
     },
     configureWebpack: {

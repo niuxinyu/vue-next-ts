@@ -1,41 +1,36 @@
 <template>
-  <Dropdown v-model:visible="visible">
+  <ADropdown v-model:visible="visible">
     <template #overlay>
-      <Menu>
-        <MenuItem>
+      <AMenu>
+        <AMenuItem>
           <UserOutlined/>
           <span>{{ t('userCenter') }}</span>
-        </MenuItem>
-        <MenuItem>
+        </AMenuItem>
+        <AMenuItem>
           <SettingOutlined/>
           <span>{{ t('setting') }}</span>
-        </MenuItem>
-        <MenuDivider/>
-        <MenuItem>
+        </AMenuItem>
+        <AMenuDivider/>
+        <AMenuItem>
           <PoweroffOutlined/>
           <span>{{ t('logout') }}</span>
-        </MenuItem>
-      </Menu>
+        </AMenuItem>
+      </AMenu>
     </template>
     <span>
       {{ t('user') }}
     </span>
-  </Dropdown>
+  </ADropdown>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Dropdown, Menu } from 'ant-design-vue';
 import { UserOutlined, SettingOutlined, PoweroffOutlined } from '@ant-design/icons-vue';
 import { usei18n } from '@/libs/tools';
 
 export default defineComponent({
   name: 'User',
   components: {
-    Dropdown,
-    Menu,
-    MenuItem: Menu.Item,
-    MenuDivider: Menu.Divider,
     UserOutlined,
     SettingOutlined,
     PoweroffOutlined

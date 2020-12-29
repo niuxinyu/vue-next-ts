@@ -1,4 +1,6 @@
 export default {
     homeName: 'home',
-    multiPage: true
+    multiPage: true,
+    asyncRoutes: false,
+    useI18n: true
 };

@@ -33,3 +33,4 @@ const temp: RouterMap = {
     }
 };
 
+export default temp;
