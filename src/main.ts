@@ -1,14 +1,18 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import './registerServiceWorker';
-import router from './router';
+import { initRouter } from './router';
 import store from './store';
 import { InstallCustomCom } from "@/plugins/CustomInstallCom";
 import bootstrap from '@/bootstrap';
+import '@/mock/login';
 
 // antd vue
-// import 'ant-design-vue/dist/antd.css';
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
 import './theme/index.less';
+
+const router = initRouter();
 
 // vue i18n
 import i18n from "@/language";
@@ -20,5 +24,6 @@ app
     .use(store)
     .use(router)
     .use(i18n)
+    .use(Antd)
     .mount('#app');
 // createApp(App).use(store).use(router).mount('#app');

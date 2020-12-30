@@ -3,6 +3,11 @@ import Main from '@/components/Main/Main.vue';
 
 const routes: Array<any> = [
     {
+        path: '/login',
+        name: 'login',
+        component: () => import('@/views/Login/Login.vue')
+    },
+    {
         path: '/',
         name: '_home',
         redirect: '/home',

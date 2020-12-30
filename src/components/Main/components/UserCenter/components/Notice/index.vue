@@ -1,40 +1,33 @@
 <template>
-  <Dropdown :trigger="['click']" v-model:visible="visible">
+  <ADropdown :trigger="['click']" v-model:visible="visible">
     <template #overlay>
       <div class="notice-dropdown">
-        <Tabs :tabBarStyle="{textAlign: 'center'}" :style="{width: '297px'}">
-          <TabPane v-for="item in tabsList" :key="item.key" :tab="item.tab">
-            <List>
-              <ListItem>
-                <ListItemMeta :title="item.tab" description="这是描述">
-                </ListItemMeta>
-              </ListItem>
-            </List>
-          </TabPane>
-        </Tabs>
+        <ATabs :tabBarStyle="{textAlign: 'center'}" :style="{width: '297px'}">
+          <ATabPane v-for="item in tabsList" :key="item.key" :tab="item.tab">
+            <AList>
+              <AListItem>
+                <AListItemMeta :title="item.tab" description="这是描述">
+                </AListItemMeta>
+              </AListItem>
+            </AList>
+          </ATabPane>
+        </ATabs>
       </div>
     </template>
     <div>
       <BellOutlined @click="e => e.preventDefault()"></BellOutlined>
     </div>
-  </Dropdown>
+  </ADropdown>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Dropdown, Tabs, List } from 'ant-design-vue';
 import { BellOutlined } from '@ant-design/icons-vue';
 
 export default defineComponent({
   name: 'Notice',
   components: {
-    Dropdown,
-    BellOutlined,
-    Tabs,
-    TabPane: Tabs.TabPane,
-    List,
-    ListItem: List.Item,
-    ListItemMeta: List.Item.Meta
+    BellOutlined
   },
   setup () {
     const tabsList = [

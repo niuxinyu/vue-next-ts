@@ -1,11 +1,11 @@
 <template>
   <div class="tags-nav">
-    <Tabs
+    <ATabs
         class="tabs"
         v-model:activeKey="activeKey"
         type="card"
     >
-      <TabPane
+      <ATabPane
           v-for="item in tagsNavList"
           :key="item.name"
       >
@@ -16,19 +16,19 @@
           <CloseOutlined v-if="shouldShowCloseable(item.name)" class="icon-close"
                          @click.stop="() => handleTabsClose(item)"/>
         </template>
-      </TabPane>
-    </Tabs>
+      </ATabPane>
+    </ATabs>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, Ref } from 'vue';
-import { Tabs } from 'ant-design-vue';
 import { TagNavItem } from "@/types";
-import { CloseOutlined } from '@/components/Icon';
+import { CloseOutlined } from '@ant-design/icons-vue';
 import config from '@/config';
 import beforeClose from '@/router/before-close';
-import { mapMutations, mapActions } from 'vuex';
+import { mapMutations, mapGetters } from 'vuex';
+import { getNextRoute } from "@/libs/utils";
 
 interface TagsNavProps {
   tagsNavList: TagNavItem[];
@@ -37,8 +37,6 @@ interface TagsNavProps {
 export default defineComponent({
   name: 'tags-nav',
   components: {
-    Tabs,
-    TabPane: Tabs.TabPane,
     CloseOutlined
   },
   props: {
@@ -85,11 +83,18 @@ export default defineComponent({
         this.closeTag(res[0]);
       }
     },
+    closeTag (params: any) {
+      const nextRoute = getNextRoute(this.getTagsNavList, params);
+      const prevTagNavList = this.getTagsNavList;
+      this.setTagNavList(prevTagNavList.filter((item: TagNavItem) => item.name !== params.name));
+      this.$router.push({
+        name: nextRoute.name
+      });
+    },
     getTagNavTitle (item: TagNavItem) {
       return item.meta.title;
     },
     ...mapMutations([
-      'closeTag',
       'addTag',
       'setTagNavList'
     ])
@@ -100,7 +105,10 @@ export default defineComponent({
   computed: {
     shouldShowCloseable () {
       return (name: string) => name !== config.homeName;
-    }
+    },
+    ...mapGetters([
+        'getTagsNavList'
+    ])
   },
   watch: {
     '$route': {

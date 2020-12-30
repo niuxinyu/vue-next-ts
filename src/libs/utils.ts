@@ -12,18 +12,18 @@ export const routeHasExist = (tagsNavList: TagNavItem[], routerItem: TagNavItem)
 /**
  * 获得可以跳转的下一个路由
  * **/
-export const getNextRoute = (state: State, route: TagNavItem): object => {
-    let res = {};
-    if (state.list.length === 2) {
-        res = state.list.find((item: TagNavItem) => item.name === config.homeName)!;
+export const getNextRoute = (list: TagNavItem[], route: TagNavItem): TagNavItem => {
+    let res = {} as TagNavItem;
+    if (list.length === 2) {
+        res = list.find((item: TagNavItem) => item.name === config.homeName)!;
     }
     else {
-        const targetIndex = state.list.findIndex((item: TagNavItem) => item.name === route.name);
-        if (targetIndex === state.list.length - 1) {
-            res = state.list[state.list.length - 2];
+        const targetIndex = list.findIndex((item: TagNavItem) => item.name === route.name);
+        if (targetIndex === list.length - 1) {
+            res = list[list.length - 2];
         }
         else {
-            res = state.list[targetIndex + 1];
+            res = list[targetIndex + 1];
         }
     }
     return res;

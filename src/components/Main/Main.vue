@@ -1,15 +1,15 @@
 <template>
-  <Layout class="layout">
-    <Sider :trigger="null" v-model:collapsed="collapsed" collapsible>
+  <ALayout class="layout">
+    <ALayoutSider :trigger="null" v-model:collapsed="collapsed" collapsible>
       <Logo
           :maxLogo="MaxLogo"
           :minLogo="MinLogo"
           :collapsed="collapsed"
       ></Logo>
       <MenuNode :MenuList="siders" @menu-click="handleTurnPage"/>
-    </Sider>
-    <Layout>
-      <Header class="header">
+    </ALayoutSider>
+    <ALayout>
+      <ALayoutHeader class="header">
         <div class="header-wrapper">
           <span class="collapsed" @click="handleCollapsed">
             <template v-if="collapsed">
@@ -21,21 +21,20 @@
           </span>
           <UserCenter></UserCenter>
         </div>
-      </Header>
-      <Content class="layout-body">
-        <Layout>
+      </ALayoutHeader>
+      <ALayoutContent class="layout-body">
+        <ALayout>
           <TagsNav :tags-nav-list="getTagsNavList"/>
-        </Layout>
-        <Content :style="`margin-top: ${config.multiPage ? -16 : 0}px`">
+        </ALayout>
+        <ALayoutContent :style="`margin-top: ${config.multiPage ? -16 : 0}px`">
           <RouterView/>
-        </Content>
-      </Content>
-    </Layout>
-  </Layout>
+        </ALayoutContent>
+      </ALayoutContent>
+    </ALayout>
+  </ALayout>
 </template>
 
 <script lang="ts">
-import { Layout } from 'ant-design-vue';
 import MenuNode from '@/components/Main/components/MenuNode.vue';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import Logo from './components/Logo';
@@ -51,10 +50,6 @@ import config from '@/config';
 export default defineComponent({
   name: 'Main',
   components: {
-    Layout,
-    Sider: Layout.Sider,
-    Header: Layout.Header,
-    Content: Layout.Content,
     MenuNode,
     MenuFoldOutlined,
     MenuUnfoldOutlined,

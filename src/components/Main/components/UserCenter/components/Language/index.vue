@@ -1,24 +1,23 @@
 <template>
-  <Dropdown v-model:visible="visible" placement="bottomRight">
+  <ADropdown v-model:visible="visible" placement="bottomRight">
     <template #overlay>
-      <Menu
+      <AMenu
           selectable
           @click="handleToggleLanguage"
       >
-        <MenuItem v-for="item in langList" :key="item.key">
+        <AMenuItem v-for="item in langList" :key="item.key">
           {{ item.title.toLowerCase() + ' ' + item.name }}
-        </MenuItem>
-      </Menu>
+        </AMenuItem>
+      </AMenu>
     </template>
     <span>
       {{ t('language') }}
     </span>
-  </Dropdown>
+  </ADropdown>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Dropdown, Menu } from 'ant-design-vue';
 import { usei18n } from '@/libs/tools';
 
 export default defineComponent({
@@ -46,11 +45,6 @@ export default defineComponent({
       langList,
       ...usei18n(msg)
     };
-  },
-  components: {
-    Dropdown,
-    Menu,
-    MenuItem: Menu.Item
   },
   data () {
     return {
