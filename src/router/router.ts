@@ -5,6 +5,9 @@ const routes: Array<any> = [
     {
         path: '/login',
         name: 'login',
+        meta: {
+            hideInMenu: true
+        },
         component: () => import('@/views/Login/Login.vue')
     },
     {

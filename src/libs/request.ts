@@ -10,7 +10,7 @@ const axios = new HttpRequest(baseUrl);
 
 
 function checkIsLogin (): boolean {
-    return !!localRead(process.env.VUE_APP_ROUTES_KEY);
+    return !!localRead('token');
 }
 
 function loadInterceptors (interceptors: Interceptor, options: AppBaseOptions): void {

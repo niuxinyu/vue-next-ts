@@ -13,6 +13,7 @@ Mock.mock('/login', 'post', (res: { body: any }, req: any) => {
         result.message = '操作成功';
         result.userName = userName;
         result.userNick = '超级管理员';
+        result.token = 'Authorization:' + Math.random();
         return createBaseResponse(result);
     }
 });

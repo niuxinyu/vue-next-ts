@@ -1,5 +1,5 @@
 <template>
-  <AForm :wrapper-col="wrapperCol">
+  <AForm :wrapper-col="wrapperCol" @submit="handleSubmit">
     <AFormItem v-bind="validateInfos.userName">
       <AInput placeholder="用户名"
               v-model:value="formDataRef.userName"
@@ -16,7 +16,7 @@
         </template>
       </AInput>
     </AFormItem>
-    <AButton style="width: 100%" type="primary" @click="handleSubmit">登录</AButton>
+    <AButton style="width: 100%" type="primary" htmlType="submit">登录</AButton>
   </AForm>
 </template>
 
@@ -26,6 +26,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { useForm } from '@ant-design-vue/use';
 import { login } from '@/api/login';
 import { message } from 'ant-design-vue';
+import { localSave } from "@/libs/tools";
 
 export default defineComponent({
   name: "LoginForm",
@@ -62,15 +63,20 @@ export default defineComponent({
       e.preventDefault();
       this.validate().then(async () => {
         const { data, status } = await login(toRaw(this.formDataRef));
-        console.log(data, status);
         if (status === 200) {
-          message.success('登录成功');
+          this.handleLogin(data);
         }
         else {
           message.error('登录失败');
         }
       }).catch((err: any) => {
         console.log(err);
+      });
+    },
+    handleLogin (params: any) {
+      localSave('token', params.data.result.token.split(":")[1]);
+      this.$router.push({
+        name: 'home'
       });
     }
   }

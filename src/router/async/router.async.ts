@@ -8,6 +8,9 @@ const temp: RouterMap = {
     login: {
         path: '/login',
         name: 'login',
+        meta: {
+            hideInMenu: true
+        },
         component: () => import('@/views/Login/Login.vue')
     },
     home: {

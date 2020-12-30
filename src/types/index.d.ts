@@ -16,6 +16,7 @@ interface RouterMap {
         readonly title?: string;
         readonly icon?: Component;
         readonly component: Function;
+        readonly meta?: any;
     };
 }
 

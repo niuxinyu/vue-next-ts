@@ -55,6 +55,7 @@ const MenuItemNode = defineComponent({
                     );
                 }
                 else {
+                    if (menu.meta && menu.meta.hideInMenu) return;
                     return (
                         <Menu.Item key={menu.name}>
                             <span style={'overflow:hidden;white-space:normal;text-overflow:clip;'}>
