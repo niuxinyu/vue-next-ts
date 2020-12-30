@@ -6,4 +6,4 @@ declare module 'ant-design-vue/lib/locale-provider/zh_CN.js' {
 
 declare module '@ant-design/icons-vue';
 
-declare module '@ant-design-vue/use';
+// declare module '@ant-design-vue/use';
