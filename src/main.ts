@@ -10,6 +10,7 @@ import '@/mock/login';
 // antd vue
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+
 import './theme/index.less';
 
 const router = initRouter();
@@ -26,4 +27,3 @@ app
     .use(i18n)
     .use(Antd)
     .mount('#app');
-// createApp(App).use(store).use(router).mount('#app');

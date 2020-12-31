@@ -1,5 +1,6 @@
 <template>
-  <AForm :wrapper-col="wrapperCol" @submit="handleSubmit">
+<!--必须添加一个model 否则登录第一次报错  不知道为什么-->
+  <AForm :wrapper-col="wrapperCol" @submit="handleSubmit" :model="{}">
     <AFormItem v-bind="validateInfos.userName">
       <AInput placeholder="用户名"
               v-model:value="formDataRef.userName"
