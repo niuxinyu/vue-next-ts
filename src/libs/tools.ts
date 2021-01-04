@@ -17,8 +17,8 @@ export const initI18n = (locale: any, fallback: any, messages?: object): any => 
 };
 
 // 获取国际化路由名
-export const getMenuName = (menu: any, vm: any): string => {
-    return vm.$t(menu.name);
+export const getMenuName = (menu: any, i18n: any): string => {
+    return i18n.t(menu.name);
 };
 
 // 初始化i18n

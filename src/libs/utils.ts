@@ -1,6 +1,10 @@
 import { TagNavItem } from '@/types';
 import { State } from '@/store/module/app.types';
 import config from '@/config';
+import Cookies from "js-cookie";
+
+// 跨域认证信息 header 名
+export const xsrfHeaderName = 'Authorization';
 
 /**
  * 判断给定的路由是否已经存在于TagsNavList中
@@ -50,3 +54,13 @@ export const autoImport = (r: __WebpackModuleApi.RequireContext): any[] => {
     });
     return __modules;
 };
+
+
+/**
+ * @date 2021/01/04
+ * @desc: 存储认证信息
+ * @author niu
+ */
+export function setAuthorization (auth: { token: string; expireAt: Date }) {
+    Cookies.set(xsrfHeaderName, 'Bearer ' + auth.token, { expires: auth.expireAt });
+}

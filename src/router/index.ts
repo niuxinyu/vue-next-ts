@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, _RouteLocationBase } from 'vue-router';
 import config from "@/config";
+import { formatRoutes } from "@/libs/routerUtil";
 
 const loginIgnore = {
     names: ['404', "403"],
@@ -13,9 +14,11 @@ const loginIgnore = {
 
 function initRouter () {
     const options = config.asyncRoutes ? require('./async/router.async').default : require('./router').default;
+    formatRoutes(options.routes);
+    console.log(options.routes);
     return createRouter({
         history: createWebHistory(process.env.BASE_URL),
-        routes: options
+        routes: options.routes
     });
 }
 

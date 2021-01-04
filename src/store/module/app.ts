@@ -16,7 +16,7 @@ export default {
     mutations: {
         addTag (state: State, payload: AddTag): void {
             const { route, type = 'unshift' } = payload;
-            if (!routeHasExist(state.list, route)) {
+            if (!routeHasExist(state.list, route) && route.name !== 'login') {
                 if (type === 'push' && route.name !== config.homeName) {
                     state.list.push(route);
                 }

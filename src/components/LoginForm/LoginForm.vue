@@ -2,7 +2,7 @@
 <!--必须添加一个model 否则登录第一次报错  不知道为什么-->
   <AForm :wrapper-col="wrapperCol" @submit="handleSubmit" :model="{}">
     <AFormItem v-bind="validateInfos.userName">
-      <AInput placeholder="用户名"
+      <AInput placeholder="用户名 admin"
               v-model:value="formDataRef.userName"
       >
         <template #prefix>
@@ -11,7 +11,7 @@
       </AInput>
     </AFormItem>
     <AFormItem v-bind="validateInfos.password">
-      <AInput placeholder="密码" v-model:value="formDataRef.password">
+      <AInput placeholder="密码 admin" type="password" v-model:value="formDataRef.password">
         <template #prefix>
           <LockOutlined style="color:rgba(0,0,0,.5)"/>
         </template>
@@ -28,6 +28,7 @@ import { useForm } from '@ant-design-vue/use';
 import { login } from '@/api/login';
 import { message } from 'ant-design-vue';
 import { localSave } from "@/libs/tools";
+import { setAuthorization } from "@/libs/utils";
 
 export default defineComponent({
   name: "LoginForm",
@@ -75,7 +76,7 @@ export default defineComponent({
       });
     },
     handleLogin (params: any) {
-      localSave('token', params.data.result.token.split(":")[1]);
+      setAuthorization({ token: params.data.result.token, expireAt: new Date(params.data.result.expireAt) });
       this.$router.push({
         name: 'home'
       });

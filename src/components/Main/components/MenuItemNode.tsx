@@ -1,15 +1,11 @@
+import { defineComponent, reactive, SetupContext, watchEffect  } from 'vue';
+import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { getMenuName } from '@/libs/tools';
+import config from '@/config';
 import { Menu } from 'ant-design-vue';
 import Icon from '@ant-design/icons-vue';
 import './MenuItem.less';
-import { defineComponent } from 'vue';
-import { getMenuName } from '@/libs/tools';
-import config from '@/config';
-
-interface CustomData {
-    menuActiveList: string[];
-    menuOpenList: string[];
-    component: string;
-}
 
 const MenuItemNode = defineComponent({
     components: {
@@ -19,15 +15,16 @@ const MenuItemNode = defineComponent({
     props: {
         MenuList: Array
     },
-    data (): CustomData {
-        return {
+    setup (props, context: SetupContext) {
+        const data = reactive({
             menuActiveList: [''],
             menuOpenList: [''],
             component: ''
-        };
-    },
-    methods: {
-        getMenuNode (menuList: object) {
+        });
+        const router = useRoute();
+        const i18n = useI18n();
+
+        const getMenuNode = (menuList: Record<string, any>) => {
             const inner = (menu: any) => {
                 if (menu.children && menu.children.length) {
                     const slots = {
@@ -38,7 +35,7 @@ const MenuItemNode = defineComponent({
                                     {
                                         menu.meta.icon && <menu.meta.icon/>
                                     }
-                                    {getMenuName(menu, this)}
+                                    {getMenuName(menu, i18n)}
                                 </span>
                             );
                         }
@@ -59,50 +56,48 @@ const MenuItemNode = defineComponent({
                     return (
                         <Menu.Item key={menu.name}>
                             <span style={'overflow:hidden;white-space:normal;text-overflow:clip;'}>
-                                {getMenuName(menu, this)}
+                                {getMenuName(menu, i18n)}
                             </span>
                         </Menu.Item>
                     );
                 }
             };
             return inner(menuList);
-        },
-        handleMenuClick (params: object): void {
-            this.$emit('menu-click', params);
-        },
-        handleUpdateOpenKeys (params: any): void {
+        };
+
+        const handleMenuClick = (params: any) => {
+            context.emit('menu-click', params);
+        };
+
+        const handleUpdateOpenKeys = (params: any) => {
             console.log(params);
-        }
-    },
-    created () {
-        const name: string = this.$route.name as string;
-        this.menuActiveList = name ? [name] : [config.homeName];
-    },
-    watch: {
-        '$route' (newVal) {
-            this.menuActiveList = [newVal.name];
-        }
-    },
-    render () {
-        const { MenuList = [] } = this;
-        // jsx https://github.com/vuejs/jsx-next/blob/dev/packages/babel-plugin-jsx/README-zh_CN.md
-        // jsx 不支持 多个v-model https://github.com/vuejs/jsx-next/issues/166
-        return (
-            <Menu
-                theme='dark'
-                mode={'inline'}
-                v-model={[this.menuActiveList, 'selectedKeys']}
-                onClick={this.handleMenuClick}
-            >
-                {
-                    MenuList.length ?
-                        MenuList.map((item: any): any => {
-                            return this.getMenuNode(item);
-                        })
-                        : null
-                }
-            </Menu>
-        );
+        };
+
+        data.menuActiveList = router.name ? [(router.name) as string] : [config.homeName];
+
+        watchEffect(() => {
+            data.menuActiveList = [(router.name) as string];
+        });
+
+        return () => {
+            const menuList = props?.MenuList;
+            return (
+                <Menu
+                    theme={'dark'}
+                    mode={'inline'}
+                    v-model={[data.menuActiveList, 'selectedKeys']}
+                    onClick={handleMenuClick}
+                >
+                    {
+                        menuList && menuList.length ?
+                            menuList.map((item: any) => {
+                                return getMenuNode(item);
+                            })
+                            : null
+                    }
+                </Menu>
+            );
+        };
     }
 });
 

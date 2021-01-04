@@ -1,17 +1,17 @@
 <template>
   <ADropdown v-model:visible="visible">
     <template #overlay>
-      <AMenu>
-        <AMenuItem>
+      <AMenu @click="handleUserCenterMenu">
+        <AMenuItem key="userCenter">
           <UserOutlined/>
           <span>{{ t('userCenter') }}</span>
         </AMenuItem>
-        <AMenuItem>
+        <AMenuItem key="setting">
           <SettingOutlined/>
           <span>{{ t('setting') }}</span>
         </AMenuItem>
         <AMenuDivider/>
-        <AMenuItem>
+        <AMenuItem key="logout">
           <PoweroffOutlined/>
           <span>{{ t('logout') }}</span>
         </AMenuItem>
@@ -27,6 +27,8 @@
 import { defineComponent } from 'vue';
 import { UserOutlined, SettingOutlined, PoweroffOutlined } from '@ant-design/icons-vue';
 import { usei18n } from '@/libs/tools';
+import { xsrfHeaderName } from "@/libs/utils";
+import Cookies from "js-cookie";
 
 export default defineComponent({
   name: 'User',
@@ -66,6 +68,21 @@ export default defineComponent({
     return {
       visible: false
     };
+  },
+  methods: {
+    handleLogout () {
+      Cookies.remove(xsrfHeaderName);
+      this.$router.push({
+        name: 'login'
+      });
+    },
+    handleUserCenterMenu (params: { key: string }) {
+      switch (params.key) {
+        case 'logout':
+        this.handleLogout();
+        break;
+      }
+    }
   }
 });
 </script>

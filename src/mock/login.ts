@@ -14,6 +14,8 @@ Mock.mock('/login', 'post', (res: { body: any }, req: any) => {
         result.userName = userName;
         result.userNick = '超级管理员';
         result.token = 'Authorization:' + Math.random();
+        // 默认过期时间为半个小时
+        result.expireAt = new Date(new Date().getTime() + 30 * 60 * 1000);
         return createBaseResponse(result);
     }
 });
