@@ -1,6 +1,6 @@
 import { AppBaseOptions, RouterConfig, RouterMap } from "@/types";
 import { Router } from "vue-router";
-import { AntdComponent } from "ant-design-vue/types/component";
+import { Component } from 'vue';
 
 const appOptions = {} as AppBaseOptions;
 
@@ -72,7 +72,7 @@ export const parserRouter = (routerConfig: (string | RouterConfig)[], routerMap:
             component: routeConfig.component || router?.component,
             redirect: routeConfig.redirect || router?.redirect,
             meta: {
-                icon: (routeConfig.icon as AntdComponent) || router?.icon
+                icon: (routeConfig.icon as Component) || router?.icon
             },
             hideInMenu: false,
             children: {}
