@@ -6,7 +6,7 @@
           :minLogo="MinLogo"
           :collapsed="collapsed"
       ></Logo>
-      <MenuNode :MenuList="siders" @menu-click="handleTurnPage"/>
+      <MenuNode :MenuList="getMenuList" @menu-click="handleTurnPage"/>
     </ALayoutSider>
     <ALayout>
       <ALayoutHeader class="header">
@@ -67,7 +67,6 @@ export default defineComponent({
   data () {
     return {
       collapsed: false,
-      siders: this.$router.options.routes,
     };
   },
   methods: {
@@ -79,10 +78,10 @@ export default defineComponent({
         name: params.key
       });
     },
-    ...mapMutations([
-      'addTag',
-      'setTagNavList'
-    ])
+    ...mapMutations({
+      'addTag': 'app/addTag',
+      'setTagNavList': 'app/setTagNavList'
+    })
   },
   mounted () {
     this.setTagNavList();
@@ -95,9 +94,10 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters([
-      'getTagsNavList'
-    ])
+    ...mapGetters({
+      'getTagsNavList': 'app/getTagsNavList',
+      'getMenuList': 'app/getMenuList'
+    })
   }
 });
 </script>

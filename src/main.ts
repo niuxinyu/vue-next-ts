@@ -5,7 +5,7 @@ import { initRouter } from './router';
 import store from './store';
 import { InstallCustomCom } from "@/plugins/CustomInstallCom";
 import bootstrap from '@/bootstrap';
-import '@/mock/login';
+import '@/mock';
 
 // antd vue
 import Antd from 'ant-design-vue';

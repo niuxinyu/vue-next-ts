@@ -1,6 +1,8 @@
 import { AppBaseOptions, RouterConfig, RouterMap } from "@/types";
 import { Router } from "vue-router";
 import { Component } from 'vue';
+import config from "@/config";
+import { localRead } from "@/libs/tools";
 
 const appOptions = {} as AppBaseOptions;
 
@@ -23,8 +25,18 @@ export const setAppOptions = (options: AppBaseOptions): void => {
  */
 export const loadRouter = (RouterConfig?: Router[]) => {
     const { store } = appOptions;
-    if (RouterConfig) {
-        store.commit('app/setRouterConfig', RouterConfig);
+    if (config.asyncRoutes) {
+        if (store.state.app.routerConfig && store.state.app.routerConfig.length) {
+            store.commit('app/setMenuList', store.state.app.routerConfig);
+        }
+        else {
+            const routers = JSON.parse(localRead(process.env.VUE_APP_ROUTES_KEY) || '[]');
+            store.commit('app/setRouterConfig', routers);
+            store.commit('app/setMenuList', routers);
+        }
+    }
+    else {
+        return;
     }
 };
 
@@ -86,6 +98,8 @@ export const parserRouter = (routerConfig: (string | RouterConfig)[], routerMap:
         }
         routes.push(route);
     });
+
+    console.log(routes);
     return routes;
 };
 

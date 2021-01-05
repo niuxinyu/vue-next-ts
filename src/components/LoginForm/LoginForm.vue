@@ -1,5 +1,5 @@
 <template>
-<!--必须添加一个model 否则登录第一次报错  不知道为什么-->
+  <!--必须添加一个model 否则登录第一次报错  不知道为什么-->
   <AForm :wrapper-col="wrapperCol" @submit="handleSubmit" :model="{}">
     <AFormItem v-bind="validateInfos.userName">
       <AInput placeholder="用户名 admin"
@@ -27,8 +27,10 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { useForm } from '@ant-design-vue/use';
 import { login } from '@/api/login';
 import { message } from 'ant-design-vue';
-import { localSave } from "@/libs/tools";
 import { setAuthorization } from "@/libs/utils";
+import config from "@/config";
+import { mapActions, mapGetters } from 'vuex';
+import { loadRouter } from "@/libs/routerUtil";
 
 export default defineComponent({
   name: "LoginForm",
@@ -64,8 +66,8 @@ export default defineComponent({
     handleSubmit (e: Event) {
       e.preventDefault();
       this.validate().then(async () => {
-        const { data, status } = await login(toRaw(this.formDataRef));
-        if (status === 200) {
+        const { data } = await login(toRaw(this.formDataRef));
+        if (data.status === 200) {
           this.handleLogin(data);
         }
         else {
@@ -75,12 +77,27 @@ export default defineComponent({
         console.log(err);
       });
     },
-    handleLogin (params: any) {
-      setAuthorization({ token: params.data.result.token, expireAt: new Date(params.data.result.expireAt) });
+    async handleLogin (params: any) {
+      setAuthorization({ token: params.result.token, expireAt: new Date(params.result.expireAt) });
+      if (config.asyncRoutes) {
+        const res = await this.getMenuList();
+        if (res) {
+          loadRouter(this.getRoutersList);
+        }
+      }
       this.$router.push({
-        name: 'home'
+        name: '_home'
       });
-    }
+    },
+    ...mapActions({
+      'getMenuList': 'app/getMenuList'
+
+    })
+  },
+  computed: {
+    ...mapGetters({
+      'getRoutersList': 'app/getRoutersList'
+    })
   }
 });
 </script>

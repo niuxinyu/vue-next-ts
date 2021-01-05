@@ -8,7 +8,7 @@ const routerMap: RouterMap = {
     },
     home: {
         path: '/home',
-        name: 'home',
+        name: '_home',
         component: () => import('@/views/Home/Home.vue')
     },
     user: {

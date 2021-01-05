@@ -1,75 +1,77 @@
 import { DotChartOutlined, HomeFilled, UserOutlined } from "@ant-design/icons-vue";
 import Main from '@/components/Main/Main.vue';
 
-const routes: Array<any> = [
-    {
-        path: '/login',
-        name: 'login',
-        meta: {
-            hideInMenu: true
+const options = {
+    routes: [
+        {
+            path: '/login',
+            name: 'login',
+            meta: {
+                hideInMenu: true
+            },
+            component: () => import('@/views/Login/Login.vue')
         },
-        component: () => import('@/views/Login/Login.vue')
-    },
-    {
-        path: '/',
-        name: '_home',
-        redirect: '/home',
-        meta: {
-            title: '首页',
-            icon: HomeFilled
+        {
+            path: '/',
+            name: '_home',
+            redirect: '/home',
+            meta: {
+                title: '首页',
+                icon: HomeFilled
+            },
+            component: Main,
+            children: [
+                {
+                    path: '/home',
+                    name: 'home',
+                    meta: {
+                        title: '首页1'
+                    },
+                    component: () => import('@/views/Home/Home.vue')
+                }
+            ]
         },
-        component: Main,
-        children: [
-            {
-                path: '/home',
-                name: 'home',
-                meta: {
-                    title: '首页1'
-                },
-                component: () => import('@/views/Home/Home.vue')
-            }
-        ]
-    },
-    {
-        path: '/user',
-        name: 'user',
-        meta: {
-            title: '用户',
-            icon: UserOutlined
+        {
+            path: '/user',
+            name: 'user',
+            meta: {
+                title: '用户',
+                icon: UserOutlined
+            },
+            component: Main,
+            children: [
+                {
+                    path: '/user/user-page',
+                    name: 'user-page',
+                    meta: {
+                        title: '用户1',
+                        icon: UserOutlined
+                    },
+                    component: () => import('@/views/User/User.vue')
+                }
+            ]
         },
-        component: Main,
-        children: [
-            {
-                path: '/user/user-page',
-                name: 'user-page',
-                meta: {
-                    title: '用户1',
-                    icon: UserOutlined
-                },
-                component: () => import('@/views/User/User.vue')
-            }
-        ]
-    },
-    {
-        path: '/other',
-        name: 'other',
-        meta: {
-            title: '其他',
-            icon: DotChartOutlined
-        },
-        component: Main,
-        children: [
-            {
-                path: 'other-page',
-                name: 'other-page',
-                meta: {
-                    title: '其他',
-                    icon: DotChartOutlined
-                },
-                component: () => import('@/views/Other/index.vue')
-            }
-        ]
-    }
-];
+        {
+            path: '/other',
+            name: 'other',
+            meta: {
+                title: '其他',
+                icon: DotChartOutlined
+            },
+            component: Main,
+            children: [
+                {
+                    path: 'other-page',
+                    name: 'other-page',
+                    meta: {
+                        title: '其他',
+                        icon: DotChartOutlined
+                    },
+                    component: () => import('@/views/Other/index.vue')
+                }
+            ]
+        }
+    ],
+};
 
-export default routes;
+export default options;

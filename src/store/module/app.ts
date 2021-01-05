@@ -3,15 +3,26 @@ import { routeHasExist } from '@/libs/utils';
 import { localRead, localSave } from "@/libs/tools";
 import { State, AddTag } from './app.types';
 import { Router } from "vue-router";
+import { getRouters } from "@/api/app/routers";
+import { ActionContext } from "vuex";
 
 const homeName = config.homeName;
 const tagsNavList = 'tagsNavList';
 
 export default {
-    namespace: true,
+    namespaced: true,
     state: {
         list: [],
-        routesConfig: []
+        routesConfig: [],
+        menuList: []
+    },
+    actions: {
+        async getMenuList (context: ActionContext<any, any> ): Promise<boolean> {
+            const { data } = await getRouters();
+            context.commit('setRouterConfig', data.result.menuList);
+            localSave(process.env.VUE_APP_ROUTES_KEY, JSON.stringify(data.result.menuList));
+            return Promise.resolve(true);
+        }
     },
     mutations: {
         addTag (state: State, payload: AddTag): void {
@@ -50,9 +61,14 @@ export default {
         },
         setRouterConfig (state: State, payload: Router[]) {
             state.routerConfig = payload;
+        },
+        setMenuList (state: State, payload: any): void {
+            state.menuList = payload;
         }
     },
     getters: {
-        getTagsNavList: (state: State) => state.list
+        getTagsNavList: (state: State) => state.list,
+        getRoutersList: (state: State) => state.routerConfig,
+        getMeuList: (state: State) => state.menuList
     }
 };

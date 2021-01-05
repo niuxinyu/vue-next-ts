@@ -4,6 +4,7 @@ import { Router } from "vue-router";
 export interface State {
     list: TagNavItem[];
     routerConfig: Router[];
+    menuList: any[];
 }
 
 export interface AddTag {
