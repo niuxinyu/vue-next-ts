@@ -22,14 +22,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRaw } from 'vue';
+import { defineComponent, reactive, toRaw, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { useForm } from '@ant-design-vue/use';
 import { login } from '@/api/login';
 import { message } from 'ant-design-vue';
 import { setAuthorization } from "@/libs/utils";
 import config from "@/config";
-import { mapActions, mapGetters } from 'vuex';
 import { loadRouter } from "@/libs/routerUtil";
 
 export default defineComponent({
@@ -39,6 +40,10 @@ export default defineComponent({
     LockOutlined
   },
   setup () {
+
+    const router = useRouter();
+    const store = useStore();
+
     const formDataRef = reactive({
       userName: '',
       password: ''
@@ -51,6 +56,40 @@ export default defineComponent({
 
     const { resetFields, validate, validateInfos } = useForm(formDataRef, formRulesRef);
 
+    const getRoutersList = computed(() => store.getters['app/getRoutersList']);
+
+    const getMenuList = () => {
+      return store.dispatch('app/getMenuList');
+    };
+
+    const handleLogin = async (params: any) => {
+      setAuthorization({ token: params.result.token, expireAt: new Date(params.result.expireAt) });
+      if (config.asyncRoutes) {
+        const res = await getMenuList();
+        if (res) {
+          loadRouter(getRoutersList.value);
+        }
+      }
+      router.push({
+        name: 'home'
+      });
+    };
+
+    const handleSubmit = (e: Event) => {
+      e.preventDefault();
+      validate().then(async () => {
+        const { data } = await login(toRaw(formDataRef));
+        if (data.status === 200) {
+          handleLogin(data);
+        }
+        else {
+          message.error('登录失败');
+        }
+      }).catch((err: any) => {
+        console.log(err);
+      });
+    };
+
     return {
       wrapperCol: {
         span: 24
@@ -59,45 +98,9 @@ export default defineComponent({
       formRulesRef,
       resetFields,
       validate,
-      validateInfos
+      validateInfos,
+      handleSubmit
     };
-  },
-  methods: {
-    handleSubmit (e: Event) {
-      e.preventDefault();
-      this.validate().then(async () => {
-        const { data } = await login(toRaw(this.formDataRef));
-        if (data.status === 200) {
-          this.handleLogin(data);
-        }
-        else {
-          message.error('登录失败');
-        }
-      }).catch((err: any) => {
-        console.log(err);
-      });
-    },
-    async handleLogin (params: any) {
-      setAuthorization({ token: params.result.token, expireAt: new Date(params.result.expireAt) });
-      if (config.asyncRoutes) {
-        const res = await this.getMenuList();
-        if (res) {
-          loadRouter(this.getRoutersList);
-        }
-      }
-      this.$router.push({
-        name: '_home'
-      });
-    },
-    ...mapActions({
-      'getMenuList': 'app/getMenuList'
-
-    })
-  },
-  computed: {
-    ...mapGetters({
-      'getRoutersList': 'app/getRoutersList'
-    })
   }
 });
 </script>

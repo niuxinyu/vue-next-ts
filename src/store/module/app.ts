@@ -20,7 +20,7 @@ export default {
         async getMenuList (context: ActionContext<any, any> ): Promise<boolean> {
             const { data } = await getRouters();
             context.commit('setRouterConfig', data.result.menuList);
-            localSave(process.env.VUE_APP_ROUTES_KEY, JSON.stringify(data.result.menuList));
+            localSave(process.env.VUE_APP_ROUTES_KEY, data.result.menuList);
             return Promise.resolve(true);
         }
     },
@@ -69,6 +69,6 @@ export default {
     getters: {
         getTagsNavList: (state: State) => state.list,
         getRoutersList: (state: State) => state.routerConfig,
-        getMeuList: (state: State) => state.menuList
+        getMenuList: (state: State) => state.menuList
     }
 };

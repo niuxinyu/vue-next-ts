@@ -33,7 +33,7 @@ const MenuItemNode = defineComponent({
                                 <span class={'menu-icon'}
                                       style={'overflow:hidden;white-space:normal;text-overflow:clip;'}>
                                     {
-                                        menu.meta.icon && <menu.meta.icon/>
+                                       menu.meta && menu.meta.icon && <menu.meta.icon/>
                                     }
                                     {getMenuName(menu, i18n)}
                                 </span>

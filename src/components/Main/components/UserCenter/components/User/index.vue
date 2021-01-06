@@ -24,9 +24,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { UserOutlined, SettingOutlined, PoweroffOutlined } from '@ant-design/icons-vue';
-import { usei18n } from '@/libs/tools';
 import { xsrfHeaderName } from "@/libs/utils";
 import Cookies from "js-cookie";
 
@@ -60,29 +61,34 @@ export default defineComponent({
         }
       }
     };
-    return {
-      ...usei18n(msg)
-    };
-  },
-  data () {
-    return {
-      visible: false
-    };
-  },
-  methods: {
-    handleLogout () {
+
+    const visible = ref(false);
+
+    const { t } = useI18n({ ...msg });
+
+    const router = useRouter();
+
+    const handleLogout = () => {
       Cookies.remove(xsrfHeaderName);
-      this.$router.push({
+      router.push({
         name: 'login'
       });
-    },
-    handleUserCenterMenu (params: { key: string }) {
+    };
+
+    const handleUserCenterMenu = (params: { key: string }) => {
       switch (params.key) {
         case 'logout':
-        this.handleLogout();
-        break;
+          handleLogout();
+          break;
       }
-    }
+    };
+
+    return {
+      t,
+      visible,
+      handleLogout,
+      handleUserCenterMenu
+    };
   }
 });
 </script>

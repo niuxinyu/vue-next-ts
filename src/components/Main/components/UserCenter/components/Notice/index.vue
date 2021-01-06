@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { BellOutlined } from '@ant-design/icons-vue';
 
 export default defineComponent({
@@ -44,20 +44,19 @@ export default defineComponent({
         tab: '关于'
       }
     ];
-    return {
-      tabsList
-    };
-  },
-  data () {
-    return {
-      show: false,
-      visible: false
-    };
-  },
-  methods: {
-    handleShowNotice () {
+    const show = ref(false);
+    const visible = ref(false);
+
+    const handleShowNotice = () => {
       console.log(666);
-    }
+    };
+
+    return {
+      tabsList,
+      show,
+      visible,
+      handleShowNotice
+    };
   }
 });
 </script>

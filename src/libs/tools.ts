@@ -21,12 +21,6 @@ export const getMenuName = (menu: any, i18n: any): string => {
     return i18n.t(menu.name);
 };
 
-// 初始化i18n
-// 针对于vue3.0的i18n的component使用方式已经发生改变
-export const usei18n = (options: UseI18nOptions): object => {
-    return useI18n(options);
-};
-
 export const localSave = (key: string, params: any): void => {
     window.localStorage.setItem(key, JSON.stringify(params));
 };

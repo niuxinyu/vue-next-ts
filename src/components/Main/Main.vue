@@ -35,15 +35,16 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref, onMounted, computed } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router';
 import MenuNode from '@/components/Main/components/MenuNode.vue';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
 import Logo from './components/Logo';
-import MaxLogo from '@/assets/images/max-logo-slow.gif';
-import MinLogo from '@/assets/images/min-logo-slow.gif';
-import { defineComponent } from 'vue';
 import UserCenter from './components/UserCenter/index.vue';
 import TagsNav from './components/TagsNav/index.vue';
-import { mapMutations, mapGetters } from 'vuex';
+import MaxLogo from '@/assets/images/max-logo-slow.gif';
+import MinLogo from '@/assets/images/min-logo-slow.gif';
 import { TagNavItem } from '@/types';
 import config from '@/config';
 
@@ -58,46 +59,55 @@ export default defineComponent({
     TagsNav
   },
   setup () {
+    const router = useRouter();
+    const route = useRoute();
+    const store = useStore();
+    const collapsed = ref(false);
+
+    function handleCollapsed () {
+      collapsed.value = !collapsed.value;
+    }
+
+    function handleTurnPage (params: { key: string }) {
+      router.push({
+        name: params.key
+      });
+    }
+
+    function addTag (payload: any) {
+      store.commit('app/addTag', payload);
+    }
+
+    function setTagNavList () {
+      store.commit('app/setTagNavList');
+    }
+
+    const getTagsNavList = computed(() => store.getters['app/getTagsNavList']);
+    const getMenuList = computed(() => store.getters['app/getMenuList']);
+
+    onMounted(() => {
+      setTagNavList();
+      const { name, meta, params, query } = route;
+      addTag({
+        route: { name, meta, params, query }
+      });
+      if (!getTagsNavList.value.find((item: TagNavItem) => item.name === route.name)) {
+        router.push({ name: config.homeName });
+      }
+    });
+
     return {
       MaxLogo,
       MinLogo,
-      config
+      config,
+      collapsed,
+      handleCollapsed,
+      handleTurnPage,
+      addTag,
+      setTagNavList,
+      getTagsNavList,
+      getMenuList
     };
-  },
-  data () {
-    return {
-      collapsed: false,
-    };
-  },
-  methods: {
-    handleCollapsed () {
-      this.collapsed = !this.collapsed;
-    },
-    handleTurnPage (params: { key: string }) {
-      this.$router.push({
-        name: params.key
-      });
-    },
-    ...mapMutations({
-      'addTag': 'app/addTag',
-      'setTagNavList': 'app/setTagNavList'
-    })
-  },
-  mounted () {
-    this.setTagNavList();
-    const { name, meta, params, query } = this.$route;
-    this.addTag({
-      route: { name, meta, params, query }
-    });
-    if (!this.getTagsNavList.find((item: TagNavItem) => item.name === this.$route.name)) {
-      this.$router.push({ name: config.homeName });
-    }
-  },
-  computed: {
-    ...mapGetters({
-      'getTagsNavList': 'app/getTagsNavList',
-      'getMenuList': 'app/getMenuList'
-    })
   }
 });
 </script>

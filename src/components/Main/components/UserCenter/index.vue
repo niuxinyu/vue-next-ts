@@ -2,13 +2,13 @@
   <div class="user-center">
     <FullScreen v-model="shouldFullScreen"/>
     <Notice class="notice"></Notice>
-    <User class="user"></User>
     <Language class="language"></Language>
+    <User class="user"></User>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import User from './components/User/index.vue';
 import Language from './components/Language/index.vue';
 import Notice from './components/Notice/index.vue';
@@ -22,9 +22,10 @@ export default defineComponent({
     Language,
     FullScreen
   },
-  data () {
+  setup () {
+    const shouldFullScreen = ref(false);
     return {
-      shouldFullScreen: false
+      shouldFullScreen
     };
   }
 });

@@ -22,7 +22,7 @@ interface RouterMap {
             hideInMenu?: boolean;
             icon?: AntdComponent;
         };
-        children?: RouterMap[];
+        children?: any [];
     };
 }
 

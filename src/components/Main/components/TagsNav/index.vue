@@ -22,17 +22,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from 'vue';
-import { TagNavItem } from "@/types";
+import { defineComponent, ref, Ref, toRefs, computed, watchEffect } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
+import { useI18n } from 'vue-i18n';
 import { CloseOutlined } from '@ant-design/icons-vue';
 import config from '@/config';
 import beforeClose from '@/router/before-close';
-import { mapMutations, mapGetters } from 'vuex';
 import { getNextRoute } from "@/libs/utils";
-
-interface TagsNavProps {
-  tagsNavList: TagNavItem[];
-}
+import { getMenuName } from "@/libs/tools";
+import { TagNavItem } from "@/types";
+import { prop } from "vue-class-component";
 
 export default defineComponent({
   name: 'tags-nav',
@@ -49,78 +49,91 @@ export default defineComponent({
       default: ''
     }
   },
-  setup () {
+  setup (props) {
+    const router = useRouter();
+    const route = useRoute();
+    const store = useStore();
     // ts 内的setup类型
     // https://github.com/ibwei/vue3-ts-base/blob/master/src/components/Slider.vue
     const activeKey: Ref<string> = ref('');
-    return {
-      activeKey
-    };
-  },
-  methods: {
-    handleTabsClick (params: TagNavItem) {
-      this.$router.push({
+    const i18n = useI18n();
+    const { tagsNavList, currentActiveTag } = toRefs(props);
+
+    const getTagsNavList = computed(() => store.getters['app/getTagsNavList']);
+    const shouldShowCloseable = computed(() => (name: string) => name !== config.homeName);
+
+    function handleTabsClick (params: TagNavItem) {
+      router.push({
         name: params.name
       });
-    },
-    handleTabsClose (params: TagNavItem) {
-      if (params.meta && params.meta.beforeCloseName && params.meta.beforeCloseName in beforeClose) {
-        new Promise(beforeClose[params.meta.beforeCloseName]).then(res => {
-          res && this.handleCanCloseTabs(params);
-        });
-      }
-      else {
-        this.handleCanCloseTabs(params);
-      }
-    },
-    handleCanCloseTabs (params: TagNavItem): void {
-      if (this.$route.name !== params.name) {
-        const newTagList = this.tagsNavList.filter((item: any) => item.name !== params.name);
-        this.setTagNavList(newTagList);
-      }
-      else {
-        const res = this.tagsNavList.filter((item: any) => item.name === params.name);
-        this.closeTag(res[0]);
-      }
-    },
-    closeTag (params: any) {
-      const nextRoute = getNextRoute(this.getTagsNavList, params);
-      const prevTagNavList = this.getTagsNavList;
-      this.setTagNavList(prevTagNavList.filter((item: TagNavItem) => item.name !== params.name));
-      this.$router.push({
+    }
+
+    function setTagNavList (payload: any) {
+      store.commit('app/setTagNavList', payload);
+    }
+
+    function closeTag (params: any) {
+      const nextRoute = getNextRoute(getTagsNavList.value, params);
+      const prevTagNavList = getTagsNavList.value;
+      setTagNavList(prevTagNavList.filter((item: TagNavItem) => item.name !== params.name));
+      router.push({
         name: nextRoute.name
       });
-    },
-    getTagNavTitle (item: TagNavItem) {
-      return item.meta.title;
-    },
-    ...mapMutations([
-      'addTag',
-      'setTagNavList'
-    ])
-  },
-  created () {
-    this.activeKey = this.$route.name as string;
-  },
-  computed: {
-    shouldShowCloseable () {
-      return (name: string) => name !== config.homeName;
-    },
-    ...mapGetters([
-        'getTagsNavList'
-    ])
-  },
-  watch: {
-    '$route': {
-      handler (newVal) {
-        this.activeKey = newVal.name;
-        const { name, meta, params, query } = newVal;
-        this.addTag({
-          route: { name, meta, params, query },
-          type: 'push'
-        });
+    }
+
+    function handleCanCloseTabs (params: TagNavItem) {
+      if (route.name !== params.name) {
+        const newTagList = tagsNavList.value.filter((item: any) => item.name !== params.name);
+        setTagNavList(newTagList);
+      }
+      else {
+        const res = tagsNavList.value.filter((item: any) => item.name === params.name);
+        closeTag(res[0]);
       }
     }
+
+    function handleTabsClose (params: TagNavItem) {
+      if (params.meta && params.meta.beforeCloseName && params.meta.beforeCloseName in beforeClose) {
+        new Promise(beforeClose[params.meta.beforeCloseName]).then(res => {
+          res && handleCanCloseTabs(params);
+        });
+      }
+      else {
+        handleCanCloseTabs(params);
+      }
+    }
+
+    function getTagNavTitle (item: TagNavItem) {
+      if (config.asyncRoutes) {
+        return getMenuName(item, i18n);
+      }
+      return item.meta.title;
+    }
+
+    const addTag = (payload: any) => {
+      store.commit('app/addTag', payload);
+    };
+
+    watchEffect(() => {
+      activeKey.value = route.name as string;
+      const { name, meta, params, query } = route;
+      addTag({
+        route: { name, meta, params, query },
+        type: 'push'
+      });
+    });
+
+    activeKey.value = route.name as string;
+
+    return {
+      activeKey,
+      i18n,
+      handleTabsClick,
+      handleTabsClose,
+      handleCanCloseTabs,
+      getTagNavTitle,
+      shouldShowCloseable
+    };
   }
 });
 </script>

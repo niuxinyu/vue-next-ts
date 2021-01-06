@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, toRefs, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { FullscreenOutlined } from '@ant-design/icons-vue';
-import { usei18n } from '@/libs/tools';
 
 interface CustomDocument extends Document {
   mozFullScreenElement?: Element;
@@ -36,7 +36,8 @@ export default defineComponent({
       default: false
     }
   },
-  setup () {
+  setup (props, context) {
+    const visible = ref(false);
     const msg = {
       messages: {
         'zh-CN': {
@@ -53,24 +54,16 @@ export default defineComponent({
         }
       }
     };
-    return {
-      ...usei18n(msg)
-    };
-  },
-  data () {
-    return {
-      visible: false
-    };
-  },
-  methods: {
-    handleFullScreenChange () {
-      this.handleFullscreen();
-    },
-    handleFullscreen () {
+    const { modelValue } = toRefs(props);
+    const { t } = useI18n({
+      ...msg
+    });
+
+    const handleFullscreen = () => {
       // 全屏进入和退出
       const main: any = document.body;
       const el: CustomDocument = document;
-      if (this.modelValue) {
+      if (modelValue.value) {
         if (el.exitFullscreen) {
           el.exitFullscreen();
         }
@@ -98,21 +91,35 @@ export default defineComponent({
           main.msRequestFullscreen();
         }
       }
-    },
-    handleToggleFullScreen () {
-      this.$emit('update:modelValue', !this.modelValue);
-      this.$emit('on-change', !this.modelValue);
-    }
-  },
-  mounted () {
-    const el: CustomDocument = document;
-    let isFullscreen: any = el.fullscreenElement || el.mozFullScreenElement || el.webkitFullscreenElement || el.fullScreen || el.mozFullScreen || el.webkitIsFullScreen;
-    isFullscreen = !!isFullscreen;
-    document.addEventListener('fullscreenchange', this.handleToggleFullScreen);
-    document.addEventListener('mozfullscreenchange', this.handleToggleFullScreen);
-    document.addEventListener('webkitfullscreenchange', this.handleToggleFullScreen);
-    document.addEventListener('msfullscreenchange', this.handleToggleFullScreen);
-    this.$emit('update:modelValue', isFullscreen);
+    };
+
+    const handleFullScreenChange = () => {
+      handleFullscreen();
+    };
+
+    const handleToggleFullScreen = () => {
+      context.emit('update:modelValue', !modelValue.value);
+      context.emit('on-change', modelValue.value);
+    };
+
+    onMounted(() => {
+      const el: CustomDocument = document;
+      let isFullscreen: any = el.fullscreenElement || el.mozFullScreenElement || el.webkitFullscreenElement || el.fullScreen || el.mozFullScreen || el.webkitIsFullScreen;
+      isFullscreen = !!isFullscreen;
+      document.addEventListener('fullscreenchange', handleToggleFullScreen);
+      document.addEventListener('mozfullscreenchange', handleToggleFullScreen);
+      document.addEventListener('webkitfullscreenchange', handleToggleFullScreen);
+      document.addEventListener('msfullscreenchange', handleToggleFullScreen);
+      context.emit('update:modelValue.value', isFullscreen);
+    });
+
+    return {
+      t,
+      visible,
+      handleFullscreen,
+      handleFullScreenChange,
+      handleToggleFullScreen
+    };
   }
 });
 </script>

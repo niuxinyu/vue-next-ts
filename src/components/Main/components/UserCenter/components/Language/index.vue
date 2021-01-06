@@ -17,8 +17,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { usei18n } from '@/libs/tools';
+import { defineComponent, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'Language',
@@ -41,21 +41,24 @@ export default defineComponent({
         }
       }
     };
+    const visible = ref(false);
+    // todo 暂时使用这种方式解决
+    const globalI18n = useI18n();
+    const i18n = useI18n({
+      ...msg
+    });
+
+    const handleToggleLanguage = (params: any) => {
+      globalI18n.locale.value = params.key;
+      visible.value = false;
+    };
+
     return {
       langList,
-      ...usei18n(msg)
+      visible,
+      t: i18n.t,
+      handleToggleLanguage
     };
-  },
-  data () {
-    return {
-      visible: false
-    };
-  },
-  methods: {
-    handleToggleLanguage (params: any) {
-      this.$i18n.locale = params.key;
-      this.visible = false;
-    }
   }
 });
 </script>

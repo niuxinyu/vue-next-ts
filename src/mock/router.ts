@@ -5,46 +5,33 @@ Mock.mock('/menuList', 'post', (res: any, req: any) => {
     const result = {} as Record<string, any>;
     result.menuList = [
         {
-            path: '/',
-            name: '首页',
-            menuId: 1,
-            mata: {},
+            id: 1,
+            title: '首页',
+            name: 'home',
+            icon: '',
+            path: '',
             children: [
                 {
-                    path: '/home',
-                    name: '首页',
-                    menuId: '1-1',
-                    meta: {},
+                    id: '1-1',
+                    title: '首页',
+                    name: 'home',
+                    icon: '',
                     children: []
                 }
             ]
         },
         {
-            path: '/user',
-            name: '用户',
-            menuId: 2,
-            mata: {},
+            id: 2,
+            title: '用户',
+            name: 'user',
+            icon: '',
+            path: '',
             children: [
                 {
-                    path: '/user',
-                    name: '用户',
-                    menuId: '2-1',
-                    meta: {},
-                    children: []
-                }
-            ]
-        },
-        {
-            path: '/other',
-            name: '其他',
-            menuId: 3,
-            mata: {},
-            children: [
-                {
-                    path: '/other',
-                    name: '其他',
-                    menuId: '3-1',
-                    meta: {},
+                    id: '2-1',
+                    title: '用户',
+                    name: 'user',
+                    icon: '',
                     children: []
                 }
             ]

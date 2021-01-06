@@ -65,41 +65,15 @@ export const loadGuards = (guards: { beforeEach: Function[]; afterEach: Function
 export const parserRouter = (routerConfig: (string | RouterConfig)[], routerMap: RouterMap) => {
     const routes: any = [];
     routerConfig.forEach((item) => {
-        let router,
-            routeConfig = {} as Record<string, any>;
+        let route: Record<string, any> = {};
         if (typeof item === 'string' && routerMap[item]) {
-            router = routerMap[item];
-            routeConfig = { path: router.path || item, router: item };
+            route = routerMap[item];
         }
         else if (typeof item === 'object') {
-            router = routerMap[(item.router as any)];
-            routeConfig = item;
-        }
-
-
-        // 从 router 和 routerConfig 解析单个路由
-        const route = {
-            path: routeConfig.path || router?.path || routeConfig.router,
-            name: routeConfig.name || router?.name,
-            component: routeConfig.component || router?.component,
-            redirect: routeConfig.redirect || router?.redirect,
-            meta: {
-                icon: (routeConfig.icon as Component) || router?.icon
-            },
-            hideInMenu: false,
-            children: {}
-        };
-
-        if (routeConfig.meta?.hideInMenu || router?.meta?.hideInMenu) {
-            route.hideInMenu = true;
-        }
-        if (routeConfig.children && routeConfig.children.length > 0) {
-            route.children = parserRouter(routeConfig.children, routerMap);
+            route = routerMap[(item.router as string)];
         }
         routes.push(route);
     });
-
-    console.log(routes);
     return routes;
 };
 
