@@ -70,6 +70,7 @@ export default defineComponent({
           loadRouter(getRoutersList.value);
         }
       }
+      console.log(router);
       router.push({
         name: 'home'
       });

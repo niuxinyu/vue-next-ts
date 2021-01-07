@@ -18,7 +18,7 @@ export default {
     },
     actions: {
         async getMenuList (context: ActionContext<any, any> ): Promise<boolean> {
-            const { data } = await getRouters();
+            const { data } = await getRouters({ mode: config.routerMode });
             context.commit('setRouterConfig', data.result.menuList);
             localSave(process.env.VUE_APP_ROUTES_KEY, data.result.menuList);
             return Promise.resolve(true);

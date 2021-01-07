@@ -1,10 +1,15 @@
-import { AppBaseOptions, RouterConfig, RouterMap } from "@/types";
-import { Router } from "vue-router";
-import { Component } from 'vue';
+import { AppBaseOptions } from "@/types";
+import { createRouter, createWebHistory, Router, RouteRecordRaw } from "vue-router";
 import config from "@/config";
 import { localRead } from "@/libs/tools";
+import RouteMap from '@/router/async/router.map.ts';
+import baseOptions from '@/router/async/router.async.ts';
 
-const appOptions = {} as AppBaseOptions;
+export const appOptions = {} as AppBaseOptions;
+
+export type CustomRouteRecordRaw = RouteRecordRaw & {
+    icon?: string;
+}
 
 /**
  * @date 2021/01/04
@@ -16,28 +21,6 @@ export const setAppOptions = (options: AppBaseOptions): void => {
     appOptions.router = router;
     appOptions.store = store;
     appOptions.i18n = i18n;
-};
-
-/**
- * @date 2021/01/04
- * @desc: 加载路由
- * @author niu
- */
-export const loadRouter = (RouterConfig?: Router[]) => {
-    const { store } = appOptions;
-    if (config.asyncRoutes) {
-        if (store.state.app.routerConfig && store.state.app.routerConfig.length) {
-            store.commit('app/setMenuList', store.state.app.routerConfig);
-        }
-        else {
-            const routers = JSON.parse(localRead(process.env.VUE_APP_ROUTES_KEY) || '[]');
-            store.commit('app/setRouterConfig', routers);
-            store.commit('app/setMenuList', routers);
-        }
-    }
-    else {
-        return;
-    }
 };
 
 /**
@@ -61,20 +44,73 @@ export const loadGuards = (guards: { beforeEach: Function[]; afterEach: Function
  * @desc: 解析路由
  * @author niu
  */
-
-export const parserRouter = (routerConfig: (string | RouterConfig)[], routerMap: RouterMap) => {
-    const routes: any = [];
-    routerConfig.forEach((item) => {
-        let route: Record<string, any> = {};
-        if (typeof item === 'string' && routerMap[item]) {
-            route = routerMap[item];
-        }
-        else if (typeof item === 'object') {
-            route = routerMap[(item.router as string)];
-        }
-        routes.push(route);
+export const parserRouters = (routes: any[]) => {
+    const routesResult: CustomRouteRecordRaw[] = [];
+    routes.forEach((item: any) => {
+        routesResult.push({
+            path: RouteMap.routes[item.name].path,
+            name: item.name,
+            // icon: item.icon,
+            component: (item.pid !== undefined && item.pid === 0) ? () => import('@/components/Main/Main.vue') : RouteMap.routes[item.component].component,
+            children: parserRouters(item.children)
+        });
     });
-    return routes;
+    return routesResult;
+};
+
+/**
+ * @date 2021/01/07
+ * @desc: 合并路由
+ * @author niu
+ */
+export const mergeRoutes = (target: any[], source: any[]) => {
+    const routesMap = {
+        routes: [] as any[]
+    };
+    target.forEach((route: any) => {
+        routesMap.routes.push(route);
+    });
+    source.forEach((route: any) => routesMap.routes.push(route));
+    return routesMap;
+};
+
+/**
+ * @date 2021/01/04
+ * @desc: 加载路由
+ * @author niu
+ */
+export const loadRouter = (RouterConfig?: Router[]) => {
+    const { store, router } = appOptions;
+    if (config.asyncRoutes) {
+        if (store.state.app.routerConfig && store.state.app.routerConfig.length) {
+            store.commit('app/setMenuList', store.state.app.routerConfig);
+            // 需要将原来的路由和新的路由合并 一并初始化后覆盖原来的路由实例
+            const res = parserRouters(store.state.app.routerConfig);
+            const finalRoutes = mergeRoutes(baseOptions.routes, res);
+            createRouter({
+                history: createWebHistory(),
+                routes: finalRoutes.routes
+            });
+            console.log(appOptions.router);
+            // appOptions.router.addRoute(res[0]);
+        }
+        else {
+            const routers = JSON.parse(localRead(process.env.VUE_APP_ROUTES_KEY) || '[]');
+            store.commit('app/setRouterConfig', routers);
+            store.commit('app/setMenuList', routers);
+            const res = parserRouters(routers);
+            const finalRoutes = mergeRoutes(baseOptions.routes, res);
+            appOptions.router = createRouter({
+                history: createWebHistory(),
+                routes: finalRoutes.routes
+            });
+            console.log(appOptions.router);
+            // appOptions.router.addRoute(res[0]);
+        }
+    }
+    else {
+        return;
+    }
 };
 
 export const formatRoutes = (routes: any) => {
@@ -85,3 +121,4 @@ export const formatRoutes = (routes: any) => {
         }
     });
 };
+
