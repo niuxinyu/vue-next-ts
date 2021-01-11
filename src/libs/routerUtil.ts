@@ -4,6 +4,7 @@ import config from "@/config";
 import { localRead } from "@/libs/tools";
 import RouteMap from '@/router/async/router.map.ts';
 import baseOptions from '@/router/async/router.async.ts';
+import Main from '@/components/Main/Main.vue';
 
 export const appOptions = {} as AppBaseOptions;
 
@@ -50,8 +51,8 @@ export const parserRouters = (routes: any[]) => {
         routesResult.push({
             path: RouteMap.routes[item.name].path,
             name: item.name,
-            // icon: item.icon,
-            component: (item.pid !== undefined && item.pid === 0) ? () => import('@/components/Main/Main.vue') : RouteMap.routes[item.component].component,
+            icon: item.icon,
+            component: item.pid === 0 ? Main : RouteMap.routes[item.name].component,
             children: parserRouters(item.children)
         });
     });
@@ -84,32 +85,21 @@ export const loadRouter = (RouterConfig?: Router[]) => {
     if (config.asyncRoutes) {
         if (store.state.app.routerConfig && store.state.app.routerConfig.length) {
             store.commit('app/setMenuList', store.state.app.routerConfig);
-            // 需要将原来的路由和新的路由合并 一并初始化后覆盖原来的路由实例
+            // todo 页面无法显示
             const res = parserRouters(store.state.app.routerConfig);
-            const finalRoutes = mergeRoutes(baseOptions.routes, res);
-            createRouter({
-                history: createWebHistory(),
-                routes: finalRoutes.routes
+            res.forEach((route) => {
+                router.addRoute(route);
             });
-            console.log(appOptions.router);
-            // appOptions.router.addRoute(res[0]);
         }
         else {
             const routers = JSON.parse(localRead(process.env.VUE_APP_ROUTES_KEY) || '[]');
             store.commit('app/setRouterConfig', routers);
             store.commit('app/setMenuList', routers);
             const res = parserRouters(routers);
-            const finalRoutes = mergeRoutes(baseOptions.routes, res);
-            appOptions.router = createRouter({
-                history: createWebHistory(),
-                routes: finalRoutes.routes
+            res.forEach((route) => {
+                router.addRoute(route);
             });
-            console.log(appOptions.router);
-            // appOptions.router.addRoute(res[0]);
         }
-    }
-    else {
-        return;
     }
 };
 

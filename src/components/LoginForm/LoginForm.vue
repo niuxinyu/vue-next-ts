@@ -29,7 +29,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { useForm } from '@ant-design-vue/use';
 import { login } from '@/api/login';
 import { message } from 'ant-design-vue';
-import { setAuthorization } from "@/libs/utils";
+import { setAuthorization, turnTo } from "@/libs/utils";
 import config from "@/config";
 import { loadRouter } from "@/libs/routerUtil";
 
@@ -70,10 +70,7 @@ export default defineComponent({
           loadRouter(getRoutersList.value);
         }
       }
-      console.log(router);
-      router.push({
-        name: 'home'
-      });
+      turnTo(router, '/home');
     };
 
     const handleSubmit = (e: Event) => {

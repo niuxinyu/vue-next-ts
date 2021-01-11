@@ -29,6 +29,10 @@ export const localRead = (key: string): any => {
     return window.localStorage.getItem(key);
 };
 
+export const localClear = (): void => {
+    window.localStorage.clear();
+};
+
 export const hasOwnProperty = (source: CusObject, key: string): boolean => {
     return Object.prototype.hasOwnProperty.call(source, key);
 };

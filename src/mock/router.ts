@@ -52,14 +52,7 @@ Mock.mock('/menuList', 'post', (res: { body: any }, req: any) => {
                         icon: '',
                         component: 'home',
                         children: []
-                    }
-                ]
-            },
-            {
-                name: 'user',
-                pid: 0,
-                icon: '',
-                children: [
+                    },
                     {
                         name: 'user',
                         icon: '',
@@ -67,7 +60,20 @@ Mock.mock('/menuList', 'post', (res: { body: any }, req: any) => {
                         children: []
                     }
                 ]
-            }
+            },
+            // {
+            //     name: 'user',
+            //     pid: 0,
+            //     icon: '',
+            //     children: [
+            //         {
+            //             name: 'user',
+            //             icon: '',
+            //             component: 'user',
+            //             children: []
+            //         }
+            //     ]
+            // }
         ];
     }
     return createBaseResponse(result);

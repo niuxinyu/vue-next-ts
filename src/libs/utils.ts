@@ -2,6 +2,7 @@ import { TagNavItem } from '@/types';
 import { State } from '@/store/module/app.types';
 import config from '@/config';
 import Cookies from "js-cookie";
+import { Router } from "vue-router";
 
 // 跨域认证信息 header 名
 export const xsrfHeaderName = 'Authorization';
@@ -64,3 +65,14 @@ export const autoImport = (r: __WebpackModuleApi.RequireContext): any[] => {
 export function setAuthorization (auth: { token: string; expireAt: Date }) {
     Cookies.set(xsrfHeaderName, 'Bearer ' + auth.token, { expires: auth.expireAt });
 }
+
+/**
+ * @date 2021/01/11
+ * @desc: 路由跳转方法 使用了addRoute push 就不好使了，也不知道为啥
+ * @author niu
+*/
+export const turnTo = (router: Router, path: string) => {
+    router.replace({
+        path: path
+    });
+};

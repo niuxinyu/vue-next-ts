@@ -47,6 +47,7 @@ import MaxLogo from '@/assets/images/max-logo-slow.gif';
 import MinLogo from '@/assets/images/min-logo-slow.gif';
 import { TagNavItem } from '@/types';
 import config from '@/config';
+import { turnTo } from "@/libs/utils";
 
 export default defineComponent({
   name: 'Main',
@@ -69,9 +70,11 @@ export default defineComponent({
     }
 
     function handleTurnPage (params: { key: string }) {
-      router.push({
-        name: params.key
-      });
+      // 不知道为什么 push 无法正确显示组件
+      // router.push({
+      //   name: params.key
+      // });
+      turnTo(router, '/' + params.key);
     }
 
     function addTag (payload: any) {
@@ -92,7 +95,8 @@ export default defineComponent({
         route: { name, meta, params, query }
       });
       if (!getTagsNavList.value.find((item: TagNavItem) => item.name === route.name)) {
-        router.push({ name: config.homeName });
+        // router.push({ name: config.homeName });
+        turnTo(router, '/' + config.homeName);
       }
     });
 

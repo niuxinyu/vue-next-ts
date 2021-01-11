@@ -42,7 +42,7 @@ export default defineComponent({
       }
     };
     const visible = ref(false);
-    // todo 暂时使用这种方式解决
+    // fixme 暂时使用这种方式解决
     const globalI18n = useI18n();
     const i18n = useI18n({
       ...msg

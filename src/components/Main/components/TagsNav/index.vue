@@ -29,7 +29,7 @@ import { useI18n } from 'vue-i18n';
 import { CloseOutlined } from '@ant-design/icons-vue';
 import config from '@/config';
 import beforeClose from '@/router/before-close';
-import { getNextRoute } from "@/libs/utils";
+import { getNextRoute, turnTo } from "@/libs/utils";
 import { getMenuName } from "@/libs/tools";
 import { TagNavItem } from "@/types";
 import { prop } from "vue-class-component";
@@ -63,9 +63,10 @@ export default defineComponent({
     const shouldShowCloseable = computed(() => (name: string) => name !== config.homeName);
 
     function handleTabsClick (params: TagNavItem) {
-      router.push({
-        name: params.name
-      });
+      turnTo(router, '/' + params.name);
+      // router.push({
+      //   name: params.name
+      // });
     }
 
     function setTagNavList (payload: any) {
@@ -76,9 +77,10 @@ export default defineComponent({
       const nextRoute = getNextRoute(getTagsNavList.value, params);
       const prevTagNavList = getTagsNavList.value;
       setTagNavList(prevTagNavList.filter((item: TagNavItem) => item.name !== params.name));
-      router.push({
-        name: nextRoute.name
-      });
+      turnTo(router, '/' + nextRoute.name);
+      // router.push({
+      //   name: nextRoute.name
+      // });
     }
 
     function handleCanCloseTabs (params: TagNavItem) {

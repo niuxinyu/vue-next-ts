@@ -25,5 +25,8 @@ app
     .use(store)
     .use(router)
     .use(i18n)
-    .use(Antd)
-    .mount('#app');
+    .use(Antd);
+
+router.isReady().then(() => {
+    app.mount('#app');
+});

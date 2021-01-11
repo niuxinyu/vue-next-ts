@@ -28,8 +28,9 @@ import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { UserOutlined, SettingOutlined, PoweroffOutlined } from '@ant-design/icons-vue';
-import { xsrfHeaderName } from "@/libs/utils";
+import { turnTo, xsrfHeaderName } from "@/libs/utils";
 import Cookies from "js-cookie";
+import { localClear } from "@/libs/tools";
 
 export default defineComponent({
   name: 'User',
@@ -70,9 +71,8 @@ export default defineComponent({
 
     const handleLogout = () => {
       Cookies.remove(xsrfHeaderName);
-      router.push({
-        name: 'login'
-      });
+      localClear();
+      turnTo(router, '/login');
     };
 
     const handleUserCenterMenu = (params: { key: string }) => {
