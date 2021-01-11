@@ -85,7 +85,6 @@ export const loadRouter = (RouterConfig?: Router[]) => {
     if (config.asyncRoutes) {
         if (store.state.app.routerConfig && store.state.app.routerConfig.length) {
             store.commit('app/setMenuList', store.state.app.routerConfig);
-            // todo 页面无法显示
             const res = parserRouters(store.state.app.routerConfig);
             res.forEach((route) => {
                 router.addRoute(route);
