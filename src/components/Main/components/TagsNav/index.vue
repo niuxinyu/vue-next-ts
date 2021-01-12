@@ -63,7 +63,7 @@ export default defineComponent({
     const shouldShowCloseable = computed(() => (name: string) => name !== config.homeName);
 
     function handleTabsClick (params: TagNavItem) {
-      turnTo(router, '/' + params.name);
+      turnTo(router, params.name);
       // router.push({
       //   name: params.name
       // });
@@ -77,7 +77,7 @@ export default defineComponent({
       const nextRoute = getNextRoute(getTagsNavList.value, params);
       const prevTagNavList = getTagsNavList.value;
       setTagNavList(prevTagNavList.filter((item: TagNavItem) => item.name !== params.name));
-      turnTo(router, '/' + nextRoute.name);
+      turnTo(router, nextRoute.name);
       // router.push({
       //   name: nextRoute.name
       // });

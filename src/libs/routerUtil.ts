@@ -49,7 +49,8 @@ export const parserRouters = (routes: any[]) => {
     const routesResult: CustomRouteRecordRaw[] = [];
     routes.forEach((item: any) => {
         routesResult.push({
-            path: RouteMap.routes[item.name].path,
+            path: item.pid === 0 ? '/' : RouteMap.routes[item.name].path,
+            redirect: item.pid === 0 ? '/home' : undefined,
             name: item.name,
             icon: item.icon,
             component: item.pid === 0 ? Main : RouteMap.routes[item.name].component,
@@ -95,6 +96,7 @@ export const loadRouter = (RouterConfig?: Router[]) => {
             store.commit('app/setRouterConfig', routers);
             store.commit('app/setMenuList', routers);
             const res = parserRouters(routers);
+            console.log(res);
             res.forEach((route) => {
                 router.addRoute(route);
             });

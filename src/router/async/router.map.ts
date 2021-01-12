@@ -16,6 +16,11 @@ const options = {
             path: '/user',
             name: 'user',
             component: () => import('@/views/User/User.vue')
+        },
+        other: {
+            path: '/other',
+            name: 'other',
+            component: () => import('@/views/Other/index.vue')
         }
     } as Record<string, any>
 };

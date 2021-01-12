@@ -58,6 +58,12 @@ Mock.mock('/menuList', 'post', (res: { body: any }, req: any) => {
                         icon: '',
                         component: 'user',
                         children: []
+                    },
+                    {
+                        name: 'other',
+                        icon: '',
+                        component: 'other',
+                        children: []
                     }
                 ]
             },

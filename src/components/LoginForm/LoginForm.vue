@@ -70,7 +70,7 @@ export default defineComponent({
           loadRouter(getRoutersList.value);
         }
       }
-      turnTo(router, '/home');
+      turnTo(router, 'home');
     };
 
     const handleSubmit = (e: Event) => {
@@ -78,7 +78,7 @@ export default defineComponent({
       validate().then(async () => {
         const { data } = await login(toRaw(formDataRef));
         if (data.status === 200) {
-          handleLogin(data);
+          await handleLogin(data);
         }
         else {
           message.error('登录失败');

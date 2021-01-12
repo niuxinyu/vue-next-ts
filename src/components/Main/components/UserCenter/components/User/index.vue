@@ -72,7 +72,7 @@ export default defineComponent({
     const handleLogout = () => {
       Cookies.remove(xsrfHeaderName);
       localClear();
-      turnTo(router, '/login');
+      turnTo(router, 'login');
     };
 
     const handleUserCenterMenu = (params: { key: string }) => {

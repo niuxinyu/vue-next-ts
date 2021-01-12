@@ -72,7 +72,10 @@ export function setAuthorization (auth: { token: string; expireAt: Date }) {
  * @author niu
 */
 export const turnTo = (router: Router, path: string) => {
-    router.replace({
-        path: path
+    // router.replace({
+    //     path: path
+    // });
+    router.push({
+        name: path
     });
 };

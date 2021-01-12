@@ -48,7 +48,7 @@ routes: [
 这是较为较为简单的实现
 
 ## 第二种动态路由模式
-需要使用 `addRouter` 
+需要使用 `addRoute` 
 
 前端只是定义基本路由，例如
 ```javascript

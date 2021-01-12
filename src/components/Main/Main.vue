@@ -71,10 +71,24 @@ export default defineComponent({
 
     function handleTurnPage (params: { key: string }) {
       // 不知道为什么 push 无法正确显示组件
+      // 问题的原因是 当使用第二种路由模式的时候，
+      /**
+       * routesResult.push({
+            path: RouteMap.routes[item.name].path,
+            name: item.name,
+            icon: item.icon,
+            component: item.pid === 0 ? Main : RouteMap.routes[item.name].component,
+            children: parserRouters(item.children)
+        });
+       * **/
+      // 这里的 path 在顶级路由 pid 为 0 的时候 显示为了 /home 导致了最终的路由无法加载组件
       // router.push({
       //   name: params.key
       // });
-      turnTo(router, '/' + params.key);
+      // turnTo(router, params.key);
+      router.push({
+        name: params.key
+      });
     }
 
     function addTag (payload: any) {
@@ -86,7 +100,7 @@ export default defineComponent({
     }
 
     const getTagsNavList = computed(() => store.getters['app/getTagsNavList']);
-    const getMenuList = computed(() => store.getters['app/getMenuList']);
+    const getMenuList = config.asyncRoutes ? computed(() => store.getters['app/getMenuList']) : router.options.routes;
 
     onMounted(() => {
       setTagNavList();
@@ -96,7 +110,7 @@ export default defineComponent({
       });
       if (!getTagsNavList.value.find((item: TagNavItem) => item.name === route.name)) {
         // router.push({ name: config.homeName });
-        turnTo(router, '/' + config.homeName);
+        turnTo(router, config.homeName);
       }
     });
 
