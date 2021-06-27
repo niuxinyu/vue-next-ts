@@ -5,12 +5,12 @@
         <h1>欢迎登录</h1>
       </div>
       <div class="login-form">
-        <h2 style="margin: 20px 26px;color: #1132F7;">Sing Up</h2>
-        <div style="text-align: center;">
-          <img :src="computer" alt="computer">
-        </div>
+        <!--<h2 style="margin: 20px 26px;color: #1132F7;">Sing Up</h2>-->
         <div class="login-form__wrapper">
-          <LoginForm />
+          <div style="text-align: center;margin: 16px;">
+            <img :src="computer" alt="computer">
+          </div>
+          <LoginForm/>
         </div>
       </div>
     </div>
@@ -68,6 +68,7 @@ export default defineComponent({
 
 .login-form {
   position: relative;
+
   &__wrapper {
     width: 60%;
     position: absolute;
