@@ -1,14 +1,14 @@
-import { AppBaseOptions } from "./types";
-import { setAppOptions, loadRouter, loadGuards } from "@/libs/routerUtil";
-import guards from "@/router/guards";
-import { loadInterceptors } from '@/libs/request';
-import interceptors from '@/libs/axios.interceptors';
+import type { App } from "vue";
+import { setupStore } from "@/store";
+import { setupRouter } from "@/router";
+import { setupInstallCom } from "@/plugins/CustomInstallCom";
+import { setupI18n } from '@/language';
 
-function bootstrap (options: AppBaseOptions) {
-    setAppOptions(options);
-    loadInterceptors(interceptors, options);
-    loadRouter();
-    loadGuards(guards, options);
+function bootstrap (app: App<Element>) {
+    setupStore(app);
+    setupRouter(app);
+    setupInstallCom(app);
+    setupI18n(app);
 }
 
 export default bootstrap;

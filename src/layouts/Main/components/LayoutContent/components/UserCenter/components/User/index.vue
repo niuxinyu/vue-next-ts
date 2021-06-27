@@ -1,39 +1,51 @@
 <template>
-  <ADropdown v-model:visible="visible">
+  <Dropdown v-model:visible="visible">
     <template #overlay>
-      <AMenu>
-        <AMenuItem>
+      <Menu @click="handleLogout">
+        <MenuItem key="userCenter">
           <UserOutlined/>
           <span>{{ t('userCenter') }}</span>
-        </AMenuItem>
-        <AMenuItem>
+        </MenuItem>
+        <MenuItem key="setting">
           <SettingOutlined/>
           <span>{{ t('setting') }}</span>
-        </AMenuItem>
-        <AMenuDivider/>
-        <AMenuItem>
+        </MenuItem>
+        <MenuDivider/>
+        <MenuItem key="logout">
           <PoweroffOutlined/>
           <span>{{ t('logout') }}</span>
-        </AMenuItem>
-      </AMenu>
+        </MenuItem>
+      </Menu>
     </template>
     <span>
       {{ t('user') }}
     </span>
-  </ADropdown>
+  </Dropdown>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import {
+  Dropdown,
+  Menu,
+} from 'ant-design-vue';
 import { UserOutlined, SettingOutlined, PoweroffOutlined } from '@ant-design/icons-vue';
-import { usei18n } from '@/libs/tools';
+import { MenuInfo } from "ant-design-vue/es/menu/src/interface";
+import { useGo } from "@/hooks/app";
+import { useI18n } from "vue-i18n";
+import { useAppStoreOutSide } from "@/store/module/app";
+import { PageEnum } from "@/enums/pageEnum";
 
 export default defineComponent({
   name: 'User',
   components: {
     UserOutlined,
     SettingOutlined,
-    PoweroffOutlined
+    PoweroffOutlined,
+    Dropdown,
+    Menu,
+    MenuItem: Menu.Item,
+    MenuDivider: Menu.Divider
   },
   setup () {
     const msg = {
@@ -58,8 +70,21 @@ export default defineComponent({
         }
       }
     };
+
+    const go = useGo();
+
+    const appStore = useAppStoreOutSide();
+
+    async function handleLogout (params: MenuInfo) {
+      if (params.key === PageEnum.BASE_LOGOUT) {
+        await appStore.logout();
+        go(PageEnum.BASE_LOGIN);
+      }
+    }
+
     return {
-      ...usei18n(msg)
+      ...useI18n(msg),
+      handleLogout
     };
   },
   data () {

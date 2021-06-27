@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import type { App } from 'vue';
 import { initI18n } from '@/libs/tools';
 import customZhCn from './lang/zh-CN';
 import customZhTw from './lang/zh-TW';
@@ -18,8 +19,10 @@ const messages = {
 
 const i18n = initI18n('zh-CN', 'en-US', messages);
 
-const app = createApp({});
-app.use(i18n);
+export function setupI18n (app: App) {
+    app.use(i18n);
+    return i18n;
+}
 
 export default i18n;
 

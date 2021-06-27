@@ -3,3 +3,19 @@ declare module '*.vue' {
   const component: DefineComponent;
   export default component;
 }
+
+namespace JSX {
+  // tslint:disable no-empty-interface
+  type Element = VNode;
+  // tslint:disable no-empty-interface
+  type ElementClass = ComponentRenderProxy;
+  interface ElementAttributesProperty {
+    $props: any;
+  }
+  interface IntrinsicElements {
+    [elem: string]: any;
+  }
+  interface IntrinsicAttributes {
+    [elem: string]: any;
+  }
+}

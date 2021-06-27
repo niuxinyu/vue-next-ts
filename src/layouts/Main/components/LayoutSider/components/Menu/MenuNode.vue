@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import MenuItem from './MenuItemNode';
+import MenuItem from './MenuItemNode.vue';
 
 export default {
   name: 'MenuNode',

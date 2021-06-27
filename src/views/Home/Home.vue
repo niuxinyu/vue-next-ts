@@ -1,17 +1,30 @@
 <template>
-  <ACard>
+  <Card>
     <h1>
-      {{ $t('home') }}
+      {{ t('home') }}
     </h1>
-  </ACard>
+  </Card>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { defineComponent } from 'vue';
+import {
+  Card
+} from 'ant-design-vue';
+import { useI18n } from "vue-i18n";
 
-@Options({})
-export default class Home extends Vue {
-}
+export default defineComponent({
+  name: 'Home',
+  components: {
+    Card
+  },
+  setup () {
+    const { t } = useI18n();
+    return {
+      t
+    };
+  }
+});
 </script>
 
 <style scoped>

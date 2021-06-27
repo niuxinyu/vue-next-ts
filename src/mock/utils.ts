@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 export function createBaseResponse (source: any, fail = false) {
     return {
         status: fail ? 400 : 200,

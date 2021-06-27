@@ -8,5 +8,5 @@ export interface State {
 
 export interface AddTag {
     route: TagNavItem;
-    type: string;
+    type: 'unshift' | 'push';
 }

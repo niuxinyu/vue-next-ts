@@ -1,7 +1,8 @@
 import { DotChartOutlined, HomeFilled, UserOutlined } from "@ant-design/icons-vue";
-import Main from '@/components/Main/Main.vue';
+import Main from '@/layouts/Main/Main.vue';
+import type { RouteRecordRaw } from "vue-router";
 
-const routes: Array<any> = [
+const routes: RouteRecordRaw[] = [
     {
         path: '/login',
         name: 'login',
@@ -69,7 +70,12 @@ const routes: Array<any> = [
                 component: () => import('@/views/Other/index.vue')
             }
         ]
-    }
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import('@/views/ErrorPage/ErrorPage.vue')
+    },
 ];
 
 export default routes;

@@ -1,14 +1,20 @@
 <template>
-  <ACard>
+  <Card>
     <h1>这是other页面</h1>
-  </ACard>
+  </Card>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import {
+  Card
+} from 'ant-design-vue';
 
 export default defineComponent({
-  name: 'index'
+  name: 'index',
+  components: {
+    Card
+  }
 });
 </script>
 

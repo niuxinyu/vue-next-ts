@@ -42,8 +42,10 @@ export default defineComponent({
   cursor: pointer;
 }
 
-.notice, .user, .language {
-  .userCenterPadding();
+::v-deep {
+  .notice, .user, .language {
+    .userCenterPadding();
+  }
 }
 
 .notice {

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Mock from 'mockjs';
 import { createBaseResponse } from "@/mock/utils";
 

@@ -1,27 +1,37 @@
 <template>
-  <ADropdown v-model:visible="visible" placement="bottomRight">
+  <Dropdown v-model:visible="visible" placement="bottomRight">
     <template #overlay>
-      <AMenu
+      <Menu
           selectable
           @click="handleToggleLanguage"
       >
-        <AMenuItem v-for="item in langList" :key="item.key">
+        <MenuItem v-for="item in langList" :key="item.key">
           {{ item.title.toLowerCase() + ' ' + item.name }}
-        </AMenuItem>
-      </AMenu>
+        </MenuItem>
+      </Menu>
     </template>
     <span>
       {{ t('language') }}
     </span>
-  </ADropdown>
+  </Dropdown>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { usei18n } from '@/libs/tools';
+import { defineComponent, ref } from 'vue';
+import {
+  Dropdown,
+  Menu,
+} from 'ant-design-vue';
+import { useI18n, UseI18nOptions } from "vue-i18n";
+import type { Ref } from 'vue';
 
 export default defineComponent({
   name: 'Language',
+  components: {
+    Dropdown,
+    Menu,
+    MenuItem: Menu.Item
+  },
   setup () {
     const langList = [
       { key: 'zh-CN', title: 'zh', name: '简体中文', alias: '简体' },
@@ -29,6 +39,7 @@ export default defineComponent({
       { key: 'en-US', title: 'en', name: 'English', alias: 'English' }
     ];
     const msg = {
+      useScope: 'global',
       messages: {
         'zh-CN': {
           language: '语言'
@@ -40,22 +51,22 @@ export default defineComponent({
           language: 'Language'
         }
       }
-    };
-    return {
-      langList,
-      ...usei18n(msg)
-    };
-  },
-  data () {
-    return {
-      visible: false
-    };
-  },
-  methods: {
-    handleToggleLanguage (params: any) {
-      this.$i18n.locale = params.key;
-      this.visible = false;
+    } as UseI18nOptions;
+
+    const visible: Ref<boolean> = ref(false);
+    const { t, locale } = useI18n(msg);
+
+    function handleToggleLanguage (params: any) {
+      locale.value = params.key;
+      visible.value = false;
     }
+
+    return {
+      t,
+      langList,
+      visible,
+      handleToggleLanguage,
+    };
   }
 });
 </script>

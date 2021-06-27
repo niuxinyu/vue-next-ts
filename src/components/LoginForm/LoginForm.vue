@@ -1,51 +1,95 @@
 <template>
-  <AForm :wrapper-col="wrapperCol" @submit="handleSubmit">
-    <AFormItem v-bind="validateInfos.userName">
-      <AInput placeholder="用户名"
-              v-model:value="formDataRef.userName"
+  <Form
+      :wrapper-col="wrapperCol"
+      @submit="handleSubmit"
+      :model="formDataRef"
+  >
+    <FormItem v-bind="validateInfos.userName">
+      <Input placeholder="用户名"
+             v-model:value="formDataRef.userName"
       >
         <template #prefix>
           <UserOutlined style="color:rgba(0,0,0,.5)"/>
         </template>
-      </AInput>
-    </AFormItem>
-    <AFormItem v-bind="validateInfos.password">
-      <AInput placeholder="密码" v-model:value="formDataRef.password">
+      </Input>
+    </FormItem>
+    <FormItem v-bind="validateInfos.password">
+      <Input placeholder="密码" v-model:value="formDataRef.password">
         <template #prefix>
           <LockOutlined style="color:rgba(0,0,0,.5)"/>
         </template>
-      </AInput>
-    </AFormItem>
-    <AButton style="width: 100%" type="primary" htmlType="submit">登录</AButton>
-  </AForm>
+      </Input>
+    </FormItem>
+    <Button style="width: 100%" type="primary" htmlType="submit" :loading="loginButtonLoading">登录</Button>
+  </Form>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRaw } from 'vue';
+import { defineComponent, reactive, toRaw, ref } from 'vue';
+import {
+  Form,
+  Input,
+  Button
+} from 'ant-design-vue';
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { useForm } from '@ant-design-vue/use';
 import { login } from '@/api/login';
 import { message } from 'ant-design-vue';
 import { localSave } from "@/libs/tools";
+import type { Ref } from 'vue';
+import { PageEnum } from "@/enums/pageEnum";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "LoginForm",
   components: {
+    Form,
+    FormItem: Form.Item,
+    Button,
+    Input,
     UserOutlined,
     LockOutlined
   },
   setup () {
     const formDataRef = reactive({
-      userName: '',
-      password: ''
+      userName: 'admin',
+      password: 'admin'
     });
-
     const formRulesRef = reactive({
       userName: [{ required: true, message: '用户名必填' }],
       password: [{ required: true, message: '密码必填' }]
     });
 
     const { resetFields, validate, validateInfos } = useForm(formDataRef, formRulesRef);
+
+    const router = useRouter();
+
+    async function handleLogin (params: any) {
+      return new Promise(resolve => {
+        setTimeout(async () => {
+          localSave('token', params.data.result.token.split(":")[1]);
+          await router.replace(PageEnum.BASE_HOME);
+          await
+              resolve();
+        }, 2000);
+      });
+    }
+
+    const loginButtonLoading: Ref<boolean> = ref(false);
+
+    function handleSubmit () {
+      loginButtonLoading.value = true;
+      validate().then(async () => {
+        const res = await login(toRaw(formDataRef));
+        if (res.status === 200) {
+          await handleLogin(res.data);
+        }
+        else {
+          message.error('登录失败');
+        }
+        loginButtonLoading.value = false;
+      });
+    }
 
     return {
       wrapperCol: {
@@ -55,30 +99,10 @@ export default defineComponent({
       formRulesRef,
       resetFields,
       validate,
-      validateInfos
+      validateInfos,
+      handleSubmit,
+      loginButtonLoading
     };
-  },
-  methods: {
-    handleSubmit (e: Event) {
-      e.preventDefault();
-      this.validate().then(async () => {
-        const { data, status } = await login(toRaw(this.formDataRef));
-        if (status === 200) {
-          this.handleLogin(data);
-        }
-        else {
-          message.error('登录失败');
-        }
-      }).catch((err: any) => {
-        console.log(err);
-      });
-    },
-    handleLogin (params: any) {
-      localSave('token', params.data.result.token.split(":")[1]);
-      this.$router.push({
-        name: 'home'
-      });
-    }
   }
 });
 </script>

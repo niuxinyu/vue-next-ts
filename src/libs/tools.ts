@@ -1,11 +1,9 @@
-import { createI18n, useI18n, UseI18nOptions } from 'vue-i18n';
+import { createI18n } from 'vue-i18n';
 
-interface CusObject {
-    [key: string]: any;
-}
 
-export const initI18n = (locale: any, fallback: any, messages?: object): any => {
+export const initI18n = (locale: string, fallback: string, messages?: object) => {
     const i18nOptions = {
+        legacy: false,
         locale,
         fallbackLocale: fallback,
         silentFallbackWarn: true,
@@ -16,17 +14,6 @@ export const initI18n = (locale: any, fallback: any, messages?: object): any => 
     return createI18n(i18nOptions);
 };
 
-// 获取国际化路由名
-export const getMenuName = (menu: any, vm: any): string => {
-    return vm.$t(menu.name);
-};
-
-// 初始化i18n
-// 针对于vue3.0的i18n的component使用方式已经发生改变
-export const usei18n = (options: UseI18nOptions): object => {
-    return useI18n(options);
-};
-
 export const localSave = (key: string, params: any): void => {
     window.localStorage.setItem(key, JSON.stringify(params));
 };
@@ -35,6 +22,10 @@ export const localRead = (key: string): any => {
     return window.localStorage.getItem(key);
 };
 
-export const hasOwnProperty = (source: CusObject, key: string): boolean => {
+export function localDel (key: string) {
+    return window.localStorage.removeItem(key);
+}
+
+export const hasOwnProperty = (source: Record<string, any>, key: string): boolean => {
     return Object.prototype.hasOwnProperty.call(source, key);
 };

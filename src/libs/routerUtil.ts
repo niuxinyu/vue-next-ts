@@ -1,29 +1,30 @@
-import { AppBaseOptions } from "@/types";
 import { Router } from "vue-router";
-import app from "@/store/module/app";
-const appOptions = {} as AppBaseOptions;
+import { MainRouter } from '@/router';
+import config from "@/config";
+import { AppRouterRecordRaw } from "@/types/app";
 
-export const setAppOptions = (options: AppBaseOptions): void => {
-    const { router, store, i18n } = options;
-    appOptions.router = router;
-    appOptions.store = store;
-    appOptions.i18n = i18n;
-};
-
-export const loadRouter = (RouterConfig?: Router[]) => {
-    const { store } = appOptions;
-    if (RouterConfig) {
-        store.commit('app/setRouterConfig', RouterConfig);
-    }
-};
-
-export const loadGuards = (guards: { beforeEach: Function[]; afterEach: Function[] }, options: AppBaseOptions): void => {
+// 注册守卫
+export const loadGuards = (guards: { beforeEach: Function[]; afterEach: Function[] }, router: Router): void => {
     const { beforeEach, afterEach } = guards;
-    const { router } = options;
     beforeEach.forEach((guard: Function) => {
-        router.beforeEach((to, from, next) => guard(to, from, next));
+        router.beforeEach((to, from, next) => guard(to, from, next, router));
     });
     afterEach.forEach((guard: Function) => {
-        router.beforeEach((to, from) => guard(to, from, options));
+        router.beforeEach((to, from) => guard(to, from, router));
     });
 };
+
+
+export async function resolveAsyncRoute (router: Router) {
+    if (config.asyncRoutes) {
+        const options = require('@/router/async/router.async').default;
+        const routers: AppRouterRecordRaw[] = [];
+        Object.keys(options).forEach((key: string) => {
+            routers.push(options[key]);
+        });
+        MainRouter.children = [...routers];
+        router.addRoute(MainRouter);
+        return;
+    }
+    return;
+}

@@ -1,18 +1,8 @@
 import { RouterMap } from '@/types';
 import { HomeFilled, DotChartOutlined, UserOutlined } from '@ant-design/icons-vue';
 
-const Main = () => import('@/components/Main/Main.vue');
-
 // 路由组件注册
 const temp: RouterMap = {
-    login: {
-        path: '/login',
-        name: 'login',
-        meta: {
-            hideInMenu: true
-        },
-        component: () => import('@/views/Login/Login.vue')
-    },
     home: {
         name: 'home',
         path: '/home',

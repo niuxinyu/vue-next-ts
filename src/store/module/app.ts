@@ -1,38 +1,46 @@
 import config from '@/config';
 import { routeHasExist } from '@/libs/utils';
-import { localRead, localSave } from "@/libs/tools";
-import { State, AddTag } from './app.types';
-import { Router } from "vue-router";
+import { localDel, localRead, localSave } from "@/libs/tools";
+import { AddTag } from './app.types';
+import { Router, useRouter } from "vue-router";
+import { defineStore } from 'pinia';
+import { TagNavItem } from "@/types";
+import { store } from "@/store";
+import { PageEnum } from "@/enums/pageEnum";
+import { resolveAsyncRoute } from "@/libs/routerUtil";
 
 const homeName = config.homeName;
 const tagsNavList = 'tagsNavList';
 
-export default {
-    namespace: true,
-    state: {
+export const useAppStore = defineStore({
+    id: 'app',
+    state: () => ({
         list: [],
-        routesConfig: []
-    },
-    mutations: {
-        addTag (state: State, payload: AddTag): void {
+        routesConfig: [],
+        collapsed: false,
+        alreadyAddRoute: false
+    }),
+    actions: {
+        addTag (payload: AddTag) {
             const { route, type = 'unshift' } = payload;
-            if (!routeHasExist(state.list, route)) {
+            if (route.name === PageEnum.BASE_LOGIN) return;
+            if (!routeHasExist(this.list, route)) {
                 if (type === 'push' && route.name !== config.homeName) {
-                    state.list.push(route);
+                    this.list.push(route);
                 }
                 else {
                     if (route.name === homeName) {
-                        state.list.unshift(route);
+                        this.list.unshift(route);
                     }
                     else {
-                        state.list.splice(1, 0, route);
+                        this.list.splice(1, 0, route);
                     }
                 }
-                localSave(tagsNavList, state.list);
+                localSave(tagsNavList, this.list);
             }
         },
-        setTagNavList (state: State, payload: any): void {
-            let tagList: any = [];
+        setTagNavList (payload?: TagNavItem[]): void {
+            let tagList: TagNavItem[] = [];
             if (payload) {
                 tagList = [...payload];
             }
@@ -40,19 +48,45 @@ export default {
                 tagList = JSON.parse(localRead(tagsNavList)) || [];
             }
             if (tagList[0] && tagList[0].name !== homeName) tagList.shift();
-            const homeTagIndex = tagList.find((item: any) => item.name === homeName);
+            const homeTagIndex = tagList.findIndex((item: TagNavItem) => item.name === homeName);
             if (homeTagIndex > 0) {
                 const homeTag = tagList.splice(homeTagIndex, 1)[0];
                 tagList.unshift(homeTag);
             }
-            state.list = tagList;
-            localSave(tagsNavList, state.list);
+            this.list = tagList;
+            localSave(tagsNavList, this.list);
         },
-        setRouterConfig (state: State, payload: Router[]) {
-            state.routerConfig = payload;
+        setCollapsed (payload: boolean) {
+            this.collapsed = payload;
+        },
+        setRouterConfig (payload: Router[]) {
+            this.routerConfig = payload;
+        },
+        async logout () {
+            localDel(config.VUE_APP_TOKEN);
+            return true;
+        },
+        async setAlreadyAddRoute (payload: boolean) {
+            this.alreadyAddRoute = payload;
+        },
+        async buildRoute (router: Router) {
+            await resolveAsyncRoute(router);
+            return;
         }
     },
     getters: {
-        getTagsNavList: (state: State) => state.list
+        getTagsNavList (): TagNavItem[] {
+            return this.list;
+        },
+        getCollapsed (): boolean {
+            return this.collapsed;
+        },
+        getAlreadyAddRoute (): boolean {
+            return this.alreadyAddRoute;
+        }
     }
-};
+});
+
+export function useAppStoreOutSide () {
+    return useAppStore(store);
+}

@@ -13,12 +13,15 @@ module.exports = {
         'semi': [2, 'always'], //语句强制分号结尾
         'space-before-function-paren': 2, //
         'eol-last': 'error', // 要求文件末尾保留一行空行
-        'brace-style': ['error', 'stroustrup'], // if else 等语句的换行规则 报错 必须换行,
+        // 'brace-style': ['error', 'stroustrup'], // if else 等语句的换行规则 报错 必须换行,
+        'vue/no-parsing-error': [2, { "x-invalid-end-tag": false }], // 避免自闭和标签单独写闭合标签时报错
         'camelcase': 0,
         // 允许在ts内使用var和require
         '@typescript-eslint/no-var-requires': 0,
         '@typescript-eslint/ban-ts-ignore': 0,
-        '@typescript-eslint/camelcase': 0
+        '@typescript-eslint/camelcase': 0,
+        // 允许使用any
+        '@typescript-eslint/no-explicit-any': 0
     },
     env: {
         node: true
