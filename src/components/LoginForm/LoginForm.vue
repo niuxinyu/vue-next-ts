@@ -38,7 +38,7 @@ import { message } from 'ant-design-vue';
 import { localSave } from "@/libs/tools";
 import type { Ref } from 'vue';
 import { PageEnum } from "@/enums/pageEnum";
-import { useRouter } from "vue-router";
+import router from "@/router/router";
 
 export default defineComponent({
   name: "LoginForm",
@@ -61,8 +61,6 @@ export default defineComponent({
     });
 
     const { resetFields, validate, validateInfos } = useForm(formDataRef, formRulesRef);
-
-    const router = useRouter();
 
     async function handleLogin (params: any) {
       return new Promise(resolve => {

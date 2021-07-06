@@ -2,7 +2,7 @@ import config from '@/config';
 import { routeHasExist } from '@/libs/utils';
 import { localDel, localRead, localSave } from "@/libs/tools";
 import { AddTag } from './app.types';
-import { Router, useRouter } from "vue-router";
+import { Router } from "vue-router";
 import { defineStore } from 'pinia';
 import { TagNavItem } from "@/types";
 import { store } from "@/store";

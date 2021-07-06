@@ -1,6 +1,8 @@
 import { TagNavItem } from '@/types';
 import config from '@/config';
 
+export const xsrfHeaderName = process.env.VUE_APP_TOKEN;
+
 /**
  * 判断给定的路由是否已经存在于TagsNavList中
  * **/
